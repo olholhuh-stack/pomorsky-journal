@@ -1,0 +1,1 @@
+# pomorsky-journal
