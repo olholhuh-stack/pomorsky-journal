@@ -1,12 +1,29 @@
 [build]
-  publish = "."
-
-[build.environment]
-  NODE_VERSION = "16"
+  publish = "pomorsky-journal"  # или ".", если используете Вариант 2
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/authors"
+  to = "/authors.html"
+  status = 200
+
+[[redirects]]
+  from = "/contacts"
+  to = "/contacts.html"
+  status = 200
+
+[[redirects]]
+  from = "/article"
+  to = "/article.html"
   status = 200
 
 [[redirects]]

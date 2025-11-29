@@ -705,7 +705,7 @@
                 // Имитация загрузки для демонстрации скелетона
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 
-                const response = await fetch('./articles.json');
+                const response = await fetch('articles.json');
                 allArticles = await response.json();
                 displayArticles(allArticles);
                 setupEventListeners();
