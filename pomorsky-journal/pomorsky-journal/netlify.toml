@@ -1,0 +1,60 @@
+[build]
+  publish = "."
+  command = "echo 'Static site - no build needed'"
+
+# Главная страница и SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Админ-панель
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+
+# Статические страницы - явные правила
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/authors"
+  to = "/authors.html"
+  status = 200
+
+[[redirects]]
+  from = "/contacts"
+  to = "/contacts.html"
+  status = 200
+
+# Для прямого доступа к HTML файлам
+[[redirects]]
+  from = "/:file.html"
+  to = "/:file.html"
+  status = 200
+
+# Заголовки для корректного Content-Type
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    "Content-Type" = "text/html; charset=utf-8"
+
+[[headers]]
+  for = "/*.json"
+  [headers.values]
+    "Content-Type" = "application/json"
+    "Access-Control-Allow-Origin" = "*"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    "Cache-Control" = "public, max-age=3600"
+
+# Обработка 404 ошибок
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 404
