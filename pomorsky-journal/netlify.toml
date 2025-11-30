@@ -1,5 +1,5 @@
 [build]
-  publish = "pomorsky-journal"  # или ".", если используете Вариант 2
+  publish = "pomorsky-journal"
 
 [[redirects]]
   from = "/*"
