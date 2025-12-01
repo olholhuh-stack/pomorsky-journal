@@ -6,7 +6,7 @@
     <title>Инакой - Статья</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Базовые стили с этническими мотивами */
+        /* БАЗОВЫЕ СТИЛИ */
         :root {
             --color-navy: #1a237e;
             --color-ocean: #1565c0;
@@ -22,7 +22,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
@@ -48,7 +48,7 @@
             pointer-events: none;
             z-index: -1;
         }
-        
+
         .app {
             max-width: 1000px;
             margin: 0 auto;
@@ -57,16 +57,14 @@
             width: 100%;
         }
 
-        /* Навигация */
+        /* НАВИГАЦИЯ */
         .main-nav {
             background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.95) 100%);
-            backdrop-filter: blur(10px);
             padding: 15px 0;
             margin-bottom: 30px;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             border: 1px solid rgba(255,255,255,0.6);
-            position: relative;
         }
 
         .nav-container {
@@ -76,6 +74,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
 
         .nav-logo {
@@ -86,30 +85,43 @@
             font-weight: 700;
         }
 
-        /* Гамбургер меню */
+        /* ГАМБУРГЕР КНОПКА */
         .hamburger {
             display: none;
-            flex-direction: column;
-            justify-content: space-between;
             width: 30px;
-            height: 21px;
-            background: transparent;
+            height: 20px;
+            position: relative;
+            background: none;
             border: none;
             cursor: pointer;
             padding: 0;
-            z-index: 1001;
         }
 
         .hamburger span {
+            display: block;
             width: 100%;
-            height: 3px;
+            height: 2px;
             background: var(--color-navy);
-            border-radius: 2px;
+            position: absolute;
+            left: 0;
             transition: all 0.3s ease;
         }
 
+        .hamburger span:nth-child(1) {
+            top: 0;
+        }
+
+        .hamburger span:nth-child(2) {
+            top: 9px;
+        }
+
+        .hamburger span:nth-child(3) {
+            top: 18px;
+        }
+
         .hamburger.active span:nth-child(1) {
-            transform: translateY(9px) rotate(45deg);
+            transform: rotate(45deg);
+            top: 9px;
         }
 
         .hamburger.active span:nth-child(2) {
@@ -117,13 +129,17 @@
         }
 
         .hamburger.active span:nth-child(3) {
-            transform: translateY(-9px) rotate(-45deg);
+            transform: rotate(-45deg);
+            top: 9px;
         }
 
+        /* ОБЫЧНОЕ МЕНЮ */
         .nav-links {
             display: flex;
             gap: 30px;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-links a {
@@ -133,6 +149,7 @@
             padding: 8px 16px;
             border-radius: 25px;
             transition: all 0.3s ease;
+            display: block;
         }
 
         .nav-links a:hover {
@@ -143,29 +160,64 @@
         .admin-link {
             background: var(--color-red);
             color: white !important;
-            font-size: 0.9rem;
         }
 
         .admin-link:hover {
             background: #b71c1c !important;
         }
 
-        /* Затемнение фона при открытом меню */
-        .nav-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
+        /* МОБИЛЬНОЕ МЕНЮ */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                z-index: 1002;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 250px;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                transition: right 0.4s ease;
+                z-index: 1001;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                width: 180px;
+                text-align: center;
+                font-size: 1.1rem;
+                padding: 12px 20px;
+            }
+
+            /* ОВЕРЛЕЙ */
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1000;
+                display: none;
+            }
+
+            .menu-overlay.active {
+                display: block;
+            }
         }
 
-        .nav-overlay.active {
-            display: block;
-        }
-        
+        /* СТИЛИ ДЛЯ СТАТЬИ */
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -183,14 +235,14 @@
             height: 2px;
             background: linear-gradient(90deg, transparent, var(--color-navy), transparent);
         }
-        
+
         .header h1 {
             font-family: 'Playfair Display', serif;
             font-size: 2.8rem;
             color: var(--color-navy);
             margin-bottom: 10px;
         }
-        
+
         .header p {
             font-size: 1.1rem;
             color: var(--color-ocean);
@@ -218,7 +270,7 @@
             height: 4px;
             background: linear-gradient(90deg, var(--color-navy), var(--color-ocean));
         }
-        
+
         .article-header {
             margin-bottom: 40px;
             position: relative;
@@ -233,7 +285,7 @@
             height: 3px;
             background: linear-gradient(90deg, var(--color-navy), transparent);
         }
-        
+
         .article-title {
             font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
@@ -241,7 +293,7 @@
             margin-bottom: 20px;
             line-height: 1.2;
         }
-        
+
         .article-meta {
             color: var(--color-ocean);
             font-size: 1rem;
@@ -266,7 +318,7 @@
         .article-author {
             font-weight: 600;
         }
-        
+
         .article-content {
             font-size: 1.15rem;
             line-height: 1.8;
@@ -276,7 +328,7 @@
         .article-content p {
             margin-bottom: 1.5em;
         }
-        
+
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -290,9 +342,8 @@
             border-radius: 50px;
             transition: all 0.3s ease;
             background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
         }
-        
+
         .back-button:hover {
             background-color: var(--color-navy);
             color: white;
@@ -395,7 +446,7 @@
             gap: 25px;
             margin: 35px 0;
         }
-        
+
         .gallery-item {
             text-align: center;
             position: relative;
@@ -435,6 +486,7 @@
 
         .footer-links {
             list-style: none;
+            padding: 0;
         }
 
         .footer-links li {
@@ -505,29 +557,25 @@
 
         /* Адаптивность */
         @media (max-width: 768px) {
-            .nav-container {
-                position: relative;
-            }
-
             .hamburger {
-                display: flex;
+                display: block;
+                z-index: 1002;
             }
 
             .nav-links {
                 position: fixed;
                 top: 0;
                 right: -100%;
-                width: 70%;
+                width: 250px;
                 height: 100vh;
                 background: white;
                 flex-direction: column;
-                justify-content: flex-start;
-                padding-top: 80px;
+                justify-content: center;
                 align-items: center;
-                transition: right 0.3s ease;
-                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-                z-index: 1000;
                 gap: 20px;
+                transition: right 0.4s ease;
+                z-index: 1001;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
             }
 
             .nav-links.active {
@@ -535,10 +583,25 @@
             }
 
             .nav-links a {
-                font-size: 1.2rem;
-                padding: 15px 20px;
-                width: 80%;
+                width: 180px;
                 text-align: center;
+                font-size: 1.1rem;
+                padding: 12px 20px;
+            }
+
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1000;
+                display: none;
+            }
+
+            .menu-overlay.active {
+                display: block;
             }
 
             .article-image img[src*=".png"] {
@@ -613,6 +676,9 @@
     </style>
 </head>
 <body>
+    <!-- Оверлей для меню -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
     <nav class="main-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Инакой</a>
@@ -629,8 +695,6 @@
             </ul>
         </div>
     </nav>
-
-    <div class="nav-overlay" id="navOverlay"></div>
 
     <div class="app">
         <a href="index.html" class="back-button">← Назад к статьям</a>
@@ -688,33 +752,69 @@
     </footer>
 
     <script>
-        // Гамбургер меню
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        const navOverlay = document.getElementById('navOverlay');
-        
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            navOverlay.classList.toggle('active');
-        });
-        
-        navOverlay.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-            navOverlay.classList.remove('active');
-        });
-        
-        // Закрытие меню при клике на ссылку
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
+        // КОД ДЛЯ МЕНЮ - ТАКОЙ ЖЕ КАК В INDEX.HTML
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            // Функция для открытия меню
+            function openMenu() {
+                hamburger.classList.add('active');
+                navLinks.classList.add('active');
+                menuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Блокируем скролл
+            }
+            
+            // Функция для закрытия меню
+            function closeMenu() {
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
-                navOverlay.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = ''; // Разблокируем скролл
+            }
+            
+            // Переключаем меню по клику на гамбургер
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation(); // Останавливаем всплытие
+                
+                if (navLinks.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            
+            // Закрываем меню по клику на оверлей
+            menuOverlay.addEventListener('click', function() {
+                closeMenu();
+            });
+            
+            // Закрываем меню по клику на ссылку
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    closeMenu();
+                });
+            });
+            
+            // Закрываем меню по нажатию ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+            
+            // Закрываем меню при клике вне меню
+            document.addEventListener('click', function(e) {
+                if (navLinks.classList.contains('active') && 
+                    !navLinks.contains(e.target) && 
+                    !hamburger.contains(e.target)) {
+                    closeMenu();
+                }
             });
         });
 
-        // Загрузка и отображение статьи
+        // КОД ДЛЯ ЗАГРУЗКИ СТАТЬИ
         async function loadArticle() {
             try {
                 // Имитация загрузки для демонстрации скелетона
@@ -747,6 +847,8 @@
         function displayArticle(article) {
             const container = document.getElementById('articleContainer');
             
+            if (!container) return;
+            
             // Обновляем заголовок страницы
             document.title = `${article.title} - Инакой`;
             
@@ -760,14 +862,18 @@
                     </div>
                 </div>
                 <div class="article-content">
-                    ${article.content}
+                    ${article.content || '<p>Содержание статьи не найдено.</p>'}
                 </div>
             `;
         }
 
         function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('ru-RU', options);
+            try {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString('ru-RU', options);
+            } catch (e) {
+                return dateString;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', loadArticle);
