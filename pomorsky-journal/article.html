@@ -66,6 +66,7 @@
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             border: 1px solid rgba(255,255,255,0.6);
+            position: relative;
         }
 
         .nav-container {
@@ -83,6 +84,40 @@
             color: var(--color-navy);
             text-decoration: none;
             font-weight: 700;
+        }
+
+        /* Гамбургер меню */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 3px;
+            background: var(--color-navy);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
         }
 
         .nav-links {
@@ -113,6 +148,22 @@
 
         .admin-link:hover {
             background: #b71c1c !important;
+        }
+
+        /* Затемнение фона при открытом меню */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .nav-overlay.active {
+            display: block;
         }
         
         .header {
@@ -198,6 +249,7 @@
             display: flex;
             gap: 20px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .article-category {
@@ -454,12 +506,39 @@
         /* Адаптивность */
         @media (max-width: 768px) {
             .nav-container {
-                flex-direction: column;
-                gap: 15px;
+                position: relative;
+            }
+
+            .hamburger {
+                display: flex;
             }
 
             .nav-links {
-                gap: 15px;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 80px;
+                align-items: center;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                z-index: 1000;
+                gap: 20px;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.2rem;
+                padding: 15px 20px;
+                width: 80%;
+                text-align: center;
             }
 
             .article-image img[src*=".png"] {
@@ -537,15 +616,21 @@
     <nav class="main-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Инакой</a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="about.html">О проекте</a></li>
-                <li><a href="authors.html">Авторам</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
-                <li><a href="admin/" class="admin-link">Админка</a></li>
+                <li><a href="admin/" class="admin-link">Авторам</a></li>
             </ul>
         </div>
     </nav>
+
+    <div class="nav-overlay" id="navOverlay"></div>
 
     <div class="app">
         <a href="index.html" class="back-button">← Назад к статьям</a>
@@ -589,10 +674,10 @@
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>Авторам</h3>
+                <h3>Полезные ссылки</h3>
                 <ul class="footer-links">
-                    <li><a href="authors.html">📝 Правила публикации</a></li>
-                    <li><a href="#collaboration">🤝 Сотрудничество</a></li>
+                    <li><a href="about.html">📖 О проекте</a></li>
+                    <li><a href="contacts.html">📞 Контакты</a></li>
                     <li><a href="#research">🔬 Исследования</a></li>
                 </ul>
             </div>
@@ -603,6 +688,32 @@
     </footer>
 
     <script>
+        // Гамбургер меню
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        const navOverlay = document.getElementById('navOverlay');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+        });
+        
+        navOverlay.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+            navOverlay.classList.remove('active');
+        });
+        
+        // Закрытие меню при клике на ссылку
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                navOverlay.classList.remove('active');
+            });
+        });
+
         // Загрузка и отображение статьи
         async function loadArticle() {
             try {
