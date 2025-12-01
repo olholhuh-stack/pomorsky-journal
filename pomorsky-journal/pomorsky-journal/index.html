@@ -6,7 +6,7 @@
     <title>Инакой - Журнал поморской культуры</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Базовые стили с этническими мотивами */
+        /* БАЗОВЫЕ СТИЛИ */
         :root {
             --color-navy: #1a237e;
             --color-ocean: #1565c0;
@@ -60,10 +60,9 @@
             width: 100%;
         }
 
-        /* Навигация */
+        /* НАВИГАЦИЯ - ПРОСТОЙ РАБОЧИЙ ВАРИАНТ */
         .main-nav {
             background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.95) 100%);
-            backdrop-filter: blur(10px);
             padding: 15px 0;
             margin-bottom: 30px;
             border-radius: 15px;
@@ -78,6 +77,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
 
         .nav-logo {
@@ -88,10 +88,61 @@
             font-weight: 700;
         }
 
+        /* ГАМБУРГЕР КНОПКА */
+        .hamburger {
+            display: none;
+            width: 30px;
+            height: 20px;
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--color-navy);
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span:nth-child(1) {
+            top: 0;
+        }
+
+        .hamburger span:nth-child(2) {
+            top: 9px;
+        }
+
+        .hamburger span:nth-child(3) {
+            top: 18px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 9px;
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 9px;
+        }
+
+        /* ОБЫЧНОЕ МЕНЮ */
         .nav-links {
             display: flex;
             gap: 30px;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-links a {
@@ -101,29 +152,13 @@
             padding: 8px 16px;
             border-radius: 25px;
             transition: all 0.3s ease;
-            position: relative;
+            display: block;
         }
 
         .nav-links a:hover,
         .nav-links a.active {
             background: var(--color-navy);
             color: white;
-        }
-
-        .nav-links a::after {
-            content: "";
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background: var(--color-navy);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 80%;
         }
 
         .admin-link {
@@ -135,7 +170,58 @@
             background: #b71c1c !important;
         }
 
-        /* Хедер */
+        /* МОБИЛЬНОЕ МЕНЮ */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                z-index: 1002;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 250px;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                transition: right 0.4s ease;
+                z-index: 1001;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                width: 180px;
+                text-align: center;
+                font-size: 1.1rem;
+                padding: 12px 20px;
+            }
+
+            /* ОВЕРЛЕЙ */
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1000;
+                display: none;
+            }
+
+            .menu-overlay.active {
+                display: block;
+            }
+        }
+
+        /* ОСТАЛЬНЫЕ СТИЛИ (без изменений) */
         .header {
             text-align: center;
             margin-bottom: 50px;
@@ -159,24 +245,19 @@
             font-size: 3.5rem;
             color: var(--color-navy);
             margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         .header p {
             font-size: 1.2rem;
             color: var(--color-ocean);
-            font-weight: 300;
-            letter-spacing: 1px;
         }
 
-        /* Поиск и фильтры */
         .search-filters {
             background: white;
             padding: 30px;
             border-radius: 20px;
             margin-bottom: 40px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .search-container {
@@ -266,7 +347,6 @@
             margin-left: auto;
         }
 
-        /* Сетка статей */
         .articles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
@@ -278,53 +358,15 @@
             background: linear-gradient(145deg, #ffffff, #f8f9fa);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 
-                0 8px 25px rgba(0,0,0,0.1),
-                0 2px 8px rgba(0,0,0,0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
             cursor: pointer;
             border: 1px solid rgba(255,255,255,0.5);
-            position: relative;
-            opacity: 1;
-            transform: translateY(0);
-            transition: all 0.5s ease;
-        }
-
-        .article-card.hidden {
-            opacity: 0;
-            transform: translateY(20px);
-            pointer-events: none;
-            position: absolute;
-        }
-
-        .article-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--color-navy), var(--color-ocean));
-            z-index: 2;
-        }
-
-        .article-card.identity::before {
-            background: linear-gradient(90deg, var(--color-identity), #9c27b0);
-        }
-
-        .article-card.history::before {
-            background: linear-gradient(90deg, var(--color-history), #f44336);
-        }
-
-        .article-card.culture::before {
-            background: linear-gradient(90deg, var(--color-culture), #4caf50);
         }
 
         .article-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 
-                0 15px 35px rgba(0,0,0,0.15),
-                0 8px 16px rgba(0,0,0,0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
 
         .article-image {
@@ -357,21 +399,6 @@
             letter-spacing: 0.5px;
         }
 
-        .article-category.identity {
-            color: var(--color-identity);
-            border: 1px solid var(--color-identity);
-        }
-
-        .article-category.history {
-            color: var(--color-history);
-            border: 1px solid var(--color-history);
-        }
-
-        .article-category.culture {
-            color: var(--color-culture);
-            border: 1px solid var(--color-culture);
-        }
-
         .article-content {
             padding: 25px;
         }
@@ -381,14 +408,12 @@
             font-size: 1.4rem;
             color: var(--color-navy);
             margin-bottom: 12px;
-            line-height: 1.3;
         }
 
         .article-excerpt {
             color: #5a6c7d;
             margin-bottom: 15px;
             line-height: 1.5;
-            font-size: 0.95rem;
         }
 
         .article-meta {
@@ -401,84 +426,6 @@
             border-top: 1px solid rgba(0,0,0,0.1);
         }
 
-        .article-author {
-            font-weight: 600;
-        }
-
-        .article-date {
-            opacity: 0.8;
-        }
-
-        /* Анимация загрузки */
-        .loading, .no-results {
-            text-align: center;
-            padding: 60px;
-            color: var(--color-ocean);
-            font-size: 1.1rem;
-            grid-column: 1 / -1;
-        }
-
-        .skeleton {
-            animation: skeleton-loading 1.5s ease-in-out infinite;
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            border-radius: 8px;
-        }
-
-        @keyframes skeleton-loading {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
-        }
-
-        .skeleton-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .skeleton-image {
-            height: 220px;
-            width: 100%;
-            margin-bottom: 0;
-        }
-
-        .skeleton-content {
-            padding: 25px;
-        }
-
-        .skeleton-title {
-            height: 24px;
-            width: 80%;
-            margin-bottom: 15px;
-        }
-
-        .skeleton-text {
-            height: 16px;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .skeleton-text.short {
-            width: 60%;
-        }
-
-        .skeleton-meta {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .skeleton-meta-item {
-            height: 14px;
-            width: 40%;
-        }
-
-        /* Футер */
         .footer {
             background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-dark) 100%);
             color: white;
@@ -504,6 +451,7 @@
 
         .footer-links {
             list-style: none;
+            padding: 0;
         }
 
         .footer-links li {
@@ -533,74 +481,57 @@
             font-size: 0.9rem;
         }
 
-        /* Адаптивность */
         @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .nav-links {
-                gap: 15px;
-            }
-
             .articles-grid {
                 grid-template-columns: 1fr;
             }
-
             .header h1 {
                 font-size: 2.5rem;
             }
-
             .filters-container {
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .filter-group {
                 justify-content: center;
             }
-
             .results-count {
                 text-align: center;
                 margin: 10px 0 0;
             }
-
             .search-filters {
                 padding: 20px;
             }
         }
 
         @media (max-width: 480px) {
-            .header {
-                padding: 30px 0 20px;
-            }
-
             .header h1 {
                 font-size: 2rem;
             }
-
             .filter-btn {
                 padding: 8px 16px;
                 font-size: 0.9rem;
-            }
-
-            .article-content {
-                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Оверлей для меню -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
     <nav class="main-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Инакой</a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html" class="active">Главная</a></li>
                 <li><a href="about.html">О проекте</a></li>
-                <li><a href="authors.html">Авторам</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
-                <li><a href="admin/" class="admin-link">Админка</a></li>
+                <li><a href="admin/" class="admin-link">Авторам</a></li>
             </ul>
         </div>
     </nav>
@@ -628,31 +559,7 @@
         </div>
 
         <div class="articles-grid" id="articlesList">
-            <!-- Скелетоны загрузки -->
-            <div class="skeleton-card">
-                <div class="skeleton skeleton-image"></div>
-                <div class="skeleton-content">
-                    <div class="skeleton skeleton-title"></div>
-                    <div class="skeleton skeleton-text"></div>
-                    <div class="skeleton skeleton-text short"></div>
-                    <div class="skeleton-meta">
-                        <div class="skeleton skeleton-meta-item"></div>
-                        <div class="skeleton skeleton-meta-item"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="skeleton-card">
-                <div class="skeleton skeleton-image"></div>
-                <div class="skeleton-content">
-                    <div class="skeleton skeleton-title"></div>
-                    <div class="skeleton skeleton-text"></div>
-                    <div class="skeleton skeleton-text short"></div>
-                    <div class="skeleton-meta">
-                        <div class="skeleton skeleton-meta-item"></div>
-                        <div class="skeleton skeleton-meta-item"></div>
-                    </div>
-                </div>
-            </div>
+            <!-- Статьи будут загружены JavaScript -->
         </div>
     </div>
 
@@ -680,10 +587,10 @@
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>Авторам</h3>
+                <h3>Полезные ссылки</h3>
                 <ul class="footer-links">
-                    <li><a href="authors.html">📝 Правила публикации</a></li>
-                    <li><a href="#collaboration">🤝 Сотрудничество</a></li>
+                    <li><a href="about.html">📖 О проекте</a></li>
+                    <li><a href="contacts.html">📞 Контакты</a></li>
                     <li><a href="#research">🔬 Исследования</a></li>
                 </ul>
             </div>
@@ -694,154 +601,173 @@
     </footer>
 
     <script>
-        // Глобальные переменные
-        let allArticles = [];
-        let currentCategory = 'all';
-        let currentSearch = '';
+        // ПРОСТОЙ И РАБОЧИЙ КОД ДЛЯ МЕНЮ
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            console.log('Элементы найдены:', {
+                hamburger: !!hamburger,
+                navLinks: !!navLinks,
+                menuOverlay: !!menuOverlay
+            });
+            
+            // Функция для открытия меню
+            function openMenu() {
+                console.log('Открываем меню');
+                hamburger.classList.add('active');
+                navLinks.classList.add('active');
+                menuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Блокируем скролл
+            }
+            
+            // Функция для закрытия меню
+            function closeMenu() {
+                console.log('Закрываем меню');
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = ''; // Разблокируем скролл
+            }
+            
+            // Переключаем меню по клику на гамбургер
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation(); // Останавливаем всплытие
+                console.log('Клик по гамбургеру, меню активно:', navLinks.classList.contains('active'));
+                
+                if (navLinks.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            
+            // Закрываем меню по клику на оверлей
+            menuOverlay.addEventListener('click', function() {
+                console.log('Клик по оверлею');
+                closeMenu();
+            });
+            
+            // Закрываем меню по клику на ссылку
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    console.log('Клик по ссылке в меню');
+                    closeMenu();
+                });
+            });
+            
+            // Закрываем меню по нажатию ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                    console.log('Нажата ESC');
+                    closeMenu();
+                }
+            });
+            
+            // Закрываем меню при клике вне меню
+            document.addEventListener('click', function(e) {
+                if (navLinks.classList.contains('active') && 
+                    !navLinks.contains(e.target) && 
+                    !hamburger.contains(e.target)) {
+                    console.log('Клик вне меню');
+                    closeMenu();
+                }
+            });
+        });
 
-        // Загрузка и отображение статей
+        // ЗАГРУЗКА СТАТЕЙ
         async function loadArticles() {
             try {
-                // Имитация загрузки для демонстрации скелетона
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
                 const response = await fetch('articles.json');
-                allArticles = await response.json();
-                displayArticles(allArticles);
-                setupEventListeners();
+                const articles = await response.json();
+                displayArticles(articles);
+                setupFilters(articles);
             } catch (error) {
                 console.error('Ошибка загрузки статей:', error);
-                document.getElementById('articlesList').innerHTML = '<div class="no-results">Ошибка загрузки статей. Пожалуйста, проверьте консоль для подробностей.</div>';
+                document.getElementById('articlesList').innerHTML = 
+                    '<div style="text-align: center; padding: 50px; color: var(--color-ocean)">Ошибка загрузки статей</div>';
             }
         }
-
+        
         function displayArticles(articles) {
             const container = document.getElementById('articlesList');
+            container.innerHTML = '';
             
-            if (articles.length === 0) {
-                container.innerHTML = '<div class="no-results">По вашему запросу ничего не найдено</div>';
+            if (!articles || articles.length === 0) {
+                container.innerHTML = 
+                    '<div style="text-align: center; padding: 50px; color: var(--color-ocean)">Статей не найдено</div>';
                 return;
             }
-
-            container.innerHTML = '';
-
+            
             articles.forEach(article => {
-                const articleElement = document.createElement('div');
-                articleElement.className = `article-card ${article.category}`;
-                articleElement.onclick = () => {
-                    window.location.href = `article.html?id=${article.id}`;
-                };
-
-                articleElement.innerHTML = `
+                const articleEl = document.createElement('div');
+                articleEl.className = `article-card`;
+                articleEl.innerHTML = `
                     <div class="article-image">
-                        <img src="${article.previewImage}" alt="${article.title}" loading="lazy">
-                        <div class="article-category ${article.category}">${getCategoryLabel(article.category)}</div>
+                        <img src="${article.previewImage || 'images/default.jpg'}" alt="${article.title}">
+                        <div class="article-category ${article.category}">${article.category}</div>
                     </div>
                     <div class="article-content">
                         <h3>${article.title}</h3>
                         <p class="article-excerpt">${article.excerpt}</p>
                         <div class="article-meta">
                             <span class="article-author">${article.author}</span>
-                            <span class="article-date">${formatDate(article.date)}</span>
+                            <span class="article-date">${new Date(article.date).toLocaleDateString('ru-RU')}</span>
                         </div>
                     </div>
                 `;
-
-                container.appendChild(articleElement);
+                articleEl.addEventListener('click', () => {
+                    window.location.href = `article.html?id=${article.id}`;
+                });
+                container.appendChild(articleEl);
             });
-
-            updateResultsCount(articles.length);
         }
-
-        function getCategoryLabel(category) {
-            const labels = {
-                'идентичность': 'Идентичность',
-                'история': 'История', 
-                'культура': 'Культура'
-            };
-            return labels[category] || category;
-        }
-
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('ru-RU', options);
-        }
-
-        function updateResultsCount(count) {
-            document.getElementById('resultsCount').textContent = `Найдено статей: ${count}`;
-        }
-
-        // Фильтрация и поиск
-        function filterArticles() {
-            let filtered = allArticles;
-
-            // Применяем фильтр по категории
-            if (currentCategory !== 'all') {
-                filtered = filtered.filter(article => article.category === currentCategory);
-            }
-
-            // Применяем поиск
-            if (currentSearch.trim() !== '') {
-                const searchTerm = currentSearch.toLowerCase().trim();
-                filtered = filtered.filter(article => 
-                    article.title.toLowerCase().includes(searchTerm) ||
-                    article.excerpt.toLowerCase().includes(searchTerm) ||
-                    article.content.toLowerCase().includes(searchTerm) ||
-                    article.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-                );
-            }
-
-            displayArticles(filtered);
-        }
-
-        function setupEventListeners() {
-            // Фильтры по категориям
-            document.querySelectorAll('.filter-btn').forEach(btn => {
+        
+        function setupFilters(allArticles) {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const searchInput = document.getElementById('searchInput');
+            let currentCategory = 'all';
+            let currentSearch = '';
+            
+            // Фильтрация по категориям
+            filterBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    filterBtns.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     currentCategory = this.dataset.category;
                     filterArticles();
                 });
             });
-
-            // Поиск
-            const searchInput = document.getElementById('searchInput');
-            let searchTimeout;
             
+            // Поиск
             searchInput.addEventListener('input', function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    currentSearch = this.value;
-                    filterArticles();
-                }, 300);
+                currentSearch = this.value.toLowerCase();
+                filterArticles();
             });
-
-            // Очистка поиска при нажатии Escape
-            searchInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    this.value = '';
-                    currentSearch = '';
-                    filterArticles();
+            
+            function filterArticles() {
+                let filtered = allArticles;
+                
+                if (currentCategory !== 'all') {
+                    filtered = filtered.filter(article => article.category === currentCategory);
                 }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', loadArticles);
-    </script>
-
-    <!-- Netlify Identity -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script>
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => {
-                        document.location.href = "/admin/";
-                    });
+                
+                if (currentSearch) {
+                    filtered = filtered.filter(article => 
+                        article.title.toLowerCase().includes(currentSearch) ||
+                        article.excerpt.toLowerCase().includes(currentSearch) ||
+                        (article.content && article.content.toLowerCase().includes(currentSearch))
+                    );
                 }
-            });
+                
+                displayArticles(filtered);
+                document.getElementById('resultsCount').textContent = `Найдено статей: ${filtered.length}`;
+            }
         }
+        
+        // Загружаем статьи при загрузке страницы
+        loadArticles();
     </script>
 </body>
 </html>

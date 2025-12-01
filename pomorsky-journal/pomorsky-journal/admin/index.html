@@ -1,616 +1,259 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ-панель - Инакой</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Инакой - Панель для авторов</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Georgia', serif;
-            line-height: 1.6;
-            color: #2c3e50;
-            background: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
-
+        
         .admin-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        .admin-header {
-            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
-            color: white;
-            padding: 30px;
             text-align: center;
-        }
-
-        .admin-header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-
-        .admin-nav {
-            background: #e3f2fd;
-            padding: 15px 30px;
-            display: flex;
-            gap: 20px;
-            border-bottom: 1px solid #bdc3c7;
-        }
-
-        .nav-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background: #1565c0;
-            color: white;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-        }
-
-        .nav-btn:hover {
-            background: #0d47a1;
-        }
-
-        .nav-btn.active {
-            background: #1a237e;
-        }
-
-        .admin-content {
-            padding: 30px;
-            min-height: 500px;
-        }
-
-        /* Стили для списка статей */
-        .articles-list {
-            display: grid;
-            gap: 20px;
-        }
-
-        .article-item {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #1a237e;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .article-info h3 {
-            color: #1a237e;
-            margin-bottom: 5px;
-        }
-
-        .article-meta {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-
-        .article-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-edit {
-            background: #ffc107;
-            color: #212529;
-        }
-
-        .btn-delete {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-add {
-            background: #28a745;
-            color: white;
-            margin-bottom: 20px;
-        }
-
-        /* Стили для формы редактирования */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #1a237e;
-            font-weight: bold;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
-            font-size: 1rem;
-            font-family: inherit;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #1a237e;
-            box-shadow: 0 0 0 2px rgba(26, 35, 126, 0.1);
-        }
-
-        textarea.form-control {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .tags-input {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            padding: 10px;
-            border: 1px solid #bdc3c7;
-            border-radius: 5px;
-            min-height: 44px;
-        }
-
-        .tag {
-            background: #1a237e;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .tag-remove {
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .tags-input input {
-            border: none;
-            outline: none;
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 30px;
-        }
-
-        .btn-save {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-cancel {
-            background: #6c757d;
-            color: white;
-        }
-
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
             background: white;
             padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            text-align: center;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
         }
-
-        .login-btn {
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #1a237e;
+            margin-bottom: 20px;
+        }
+        
+        .title {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+        
+        .login-button {
             background: #1a237e;
             color: white;
-            padding: 12px 30px;
             border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
             cursor: pointer;
-            margin-top: 20px;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            display: inline-block;
         }
-
-        .hidden {
+        
+        .login-button:hover {
+            background: #0d47a1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+        }
+        
+        .info {
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .error {
+            color: #c62828;
+            margin-top: 20px;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 5px;
             display: none;
         }
-
-        .status-message {
+        
+        .loading {
+            margin-top: 20px;
+            color: #666;
+            display: none;
+        }
+        
+        .success {
+            color: #388e3c;
+            margin-top: 20px;
             padding: 10px;
+            background: #e8f5e9;
             border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
+            display: none;
         }
-
-        .status-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .status-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        
+        /* Стили для самой CMS */
+        #nc-root {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            background: white;
+            overflow: auto;
         }
     </style>
 </head>
 <body>
-    <div id="loginPage" class="login-container">
-        <h2>Вход в админ-панель</h2>
-        <p>Для доступа к управлению статьями необходимо войти в систему</p>
-        <button class="login-btn" onclick="login()">Войти через Netlify</button>
-    </div>
-
-    <div id="adminPage" class="admin-container hidden">
-        <div class="admin-header">
-            <h1>Админ-панель Инакой</h1>
-            <p>Управление статьями и контентом</p>
-        </div>
-
-        <div class="admin-nav">
-            <button class="nav-btn active" onclick="showSection('articles')">Статьи</button>
-            <button class="nav-btn" onclick="showSection('newArticle')">Новая статья</button>
-            <button class="nav-btn" onclick="logout()">Выйти</button>
-        </div>
-
-        <div class="admin-content">
-            <!-- Секция списка статей -->
-            <div id="articlesSection">
-                <button class="btn btn-add" onclick="showSection('newArticle')">+ Добавить статью</button>
-                <div id="articlesList" class="articles-list">
-                    <!-- Статьи будут загружены здесь -->
-                </div>
-            </div>
-
-            <!-- Секция новой статьи -->
-            <div id="newArticleSection" class="hidden">
-                <h2>Новая статья</h2>
-                <form id="articleForm">
-                    <input type="hidden" id="articleId">
-                    
-                    <div class="form-group">
-                        <label for="articleTitle">Заголовок</label>
-                        <input type="text" id="articleTitle" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="articleSlug">Slug (URL)</label>
-                        <input type="text" id="articleSlug" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="articleExcerpt">Краткое описание</label>
-                        <textarea id="articleExcerpt" class="form-control" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="articleAuthor">Автор</label>
-                        <input type="text" id="articleAuthor" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="articleDate">Дата</label>
-                        <input type="date" id="articleDate" class="form-control" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="articleIcon">Иконка</label>
-                        <input type="text" id="articleIcon" class="form-control" placeholder="🗣️">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="articleCategory">Категория</label>
-                        <select id="articleCategory" class="form-control" required>
-                            <option value="идентичность">Идентичность</option>
-                            <option value="история">История</option>
-                            <option value="культура">Культура</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Теги</label>
-                        <div class="tags-input" id="tagsContainer">
-                            <input type="text" id="tagInput" placeholder="Введите тег и нажмите Enter">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="articlePreviewImage">Изображение превью</label>
-                        <input type="text" id="articlePreviewImage" class="form-control" value="images/previews/preview-.png">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="articleContent">Содержание (HTML)</label>
-                        <textarea id="articleContent" class="form-control" rows="15" required></textarea>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-save">Сохранить статью</button>
-                        <button type="button" class="btn btn-cancel" onclick="showSection('articles')">Отмена</button>
-                    </div>
-                </form>
-            </div>
+    <div class="admin-container" id="loginContainer">
+        <div class="logo">Инакой</div>
+        <div class="title">Панель для авторов</div>
+        <button class="login-button" id="loginButton">Войти для публикации статей</button>
+        <div class="loading" id="loading">Загрузка панели управления...</div>
+        <div class="success" id="successMessage"></div>
+        <div class="error" id="errorMessage"></div>
+        <div class="info">
+            Для публикации статей требуется доступ от редакции.<br>
+            Если у вас нет доступа, свяжитесь с редакцией через <a href="../contacts.html" style="color: #1a237e; text-decoration: none;">форму контактов</a>.
         </div>
     </div>
 
+    <div id="nc-root" style="display: none;"></div>
+    
+    <!-- Netlify CMS скрипт -->
+    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+    
     <script>
-        // Текущие теги
-        let currentTags = [];
-        let currentArticleId = null;
-
-        // Инициализация Netlify Identity
-        function initAuth() {
-            if (netlifyIdentity.currentUser()) {
-                showAdminPage();
-            } else {
-                showLoginPage();
-            }
-
-            netlifyIdentity.on('login', () => {
-                showAdminPage();
-                loadArticles();
-            });
-
-            netlifyIdentity.on('logout', () => {
-                showLoginPage();
-            });
-        }
-
-        function showLoginPage() {
-            document.getElementById('loginPage').classList.remove('hidden');
-            document.getElementById('adminPage').classList.add('hidden');
-        }
-
-        function showAdminPage() {
-            document.getElementById('loginPage').classList.add('hidden');
-            document.getElementById('adminPage').classList.remove('hidden');
-            loadArticles();
-        }
-
-        function login() {
-            netlifyIdentity.open();
-        }
-
-        function logout() {
-            netlifyIdentity.logout();
-        }
-
-        function showSection(sectionName) {
-            // Скрыть все секции
-            document.getElementById('articlesSection').classList.add('hidden');
-            document.getElementById('newArticleSection').classList.add('hidden');
+        // ПРОСТОЙ И РАБОЧИЙ КОД ДЛЯ АДМИН-ПАНЕЛИ
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginContainer = document.getElementById('loginContainer');
+            const loginButton = document.getElementById('loginButton');
+            const loading = document.getElementById('loading');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const cmsRoot = document.getElementById('nc-root');
             
-            // Показать выбранную секцию
-            document.getElementById(sectionName + 'Section').classList.remove('hidden');
+            console.log('Страница админки загружена');
             
-            // Обновить активные кнопки навигации
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            if (sectionName === 'newArticle') {
-                resetForm();
-            }
-        }
-
-        // Загрузка статей
-        async function loadArticles() {
-            try {
-                const response = await fetch('./articles.json');
-                const articles = await response.json();
-                displayArticles(articles);
-            } catch (error) {
-                console.error('Ошибка загрузки статей:', error);
-                showStatus('Ошибка загрузки статей', 'error');
-            }
-        }
-
-        function displayArticles(articles) {
-            const container = document.getElementById('articlesList');
-            container.innerHTML = '';
-
-            articles.forEach(article => {
-                const articleElement = document.createElement('div');
-                articleElement.className = 'article-item';
-                articleElement.innerHTML = `
-                    <div class="article-info">
-                        <h3>${article.title}</h3>
-                        <div class="article-meta">
-                            ${article.author} • ${new Date(article.date).toLocaleDateString('ru-RU')} • ${article.category}
-                        </div>
-                    </div>
-                    <div class="article-actions">
-                        <button class="btn btn-edit" onclick="editArticle(${article.id})">Редактировать</button>
-                        <button class="btn btn-delete" onclick="deleteArticle(${article.id})">Удалить</button>
-                    </div>
-                `;
-                container.appendChild(articleElement);
-            });
-        }
-
-        // Управление тегами
-        document.getElementById('tagInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const tag = this.value.trim();
-                if (tag && !currentTags.includes(tag)) {
-                    currentTags.push(tag);
-                    updateTagsDisplay();
-                    this.value = '';
-                }
-            }
-        });
-
-        function updateTagsDisplay() {
-            const container = document.getElementById('tagsContainer');
-            // Очистить контейнер, кроме input
-            const input = document.getElementById('tagInput');
-            container.innerHTML = '';
-            
-            currentTags.forEach(tag => {
-                const tagElement = document.createElement('span');
-                tagElement.className = 'tag';
-                tagElement.innerHTML = `
-                    ${tag}
-                    <span class="tag-remove" onclick="removeTag('${tag}')">×</span>
-                `;
-                container.appendChild(tagElement);
-            });
-            
-            container.appendChild(input);
-        }
-
-        function removeTag(tagToRemove) {
-            currentTags = currentTags.filter(tag => tag !== tagToRemove);
-            updateTagsDisplay();
-        }
-
-        // Редактирование статьи
-        function editArticle(id) {
-            fetch('./articles.json')
-                .then(response => response.json())
-                .then(articles => {
-                    const article = articles.find(a => a.id === id);
-                    if (article) {
-                        currentArticleId = id;
-                        document.getElementById('articleId').value = id;
-                        document.getElementById('articleTitle').value = article.title;
-                        document.getElementById('articleSlug').value = article.slug;
-                        document.getElementById('articleExcerpt').value = article.excerpt;
-                        document.getElementById('articleAuthor').value = article.author;
-                        document.getElementById('articleDate').value = article.date;
-                        document.getElementById('articleIcon').value = article.icon;
-                        document.getElementById('articleCategory').value = article.category;
-                        document.getElementById('articlePreviewImage').value = article.previewImage;
-                        document.getElementById('articleContent').value = article.content;
-                        
-                        currentTags = [...article.tags];
-                        updateTagsDisplay();
-                        
-                        showSection('newArticle');
-                        document.querySelector('.admin-content h2').textContent = 'Редактировать статью';
+            // Проверяем, доступен ли Netlify Identity
+            if (window.netlifyIdentity) {
+                console.log('Netlify Identity доступен');
+                
+                // Инициализируем Identity
+                window.netlifyIdentity.init();
+                
+                // Проверяем статус пользователя при загрузке
+                window.netlifyIdentity.on('init', function(user) {
+                    console.log('Identity инициализирован, пользователь:', user);
+                    
+                    if (user) {
+                        // Пользователь уже вошел - показываем CMS
+                        console.log('Пользователь уже вошел, загружаем CMS');
+                        showCMS();
+                    } else {
+                        // Пользователь не вошел - показываем кнопку входа
+                        console.log('Пользователь не вошел, показываем кнопку входа');
+                        loginContainer.style.display = 'block';
+                        loginButton.style.display = 'inline-block';
                     }
                 });
-        }
-
-        // Сброс формы
-        function resetForm() {
-            document.getElementById('articleForm').reset();
-            currentArticleId = null;
-            currentTags = [];
-            updateTagsDisplay();
-            document.querySelector('.admin-content h2').textContent = 'Новая статья';
-        }
-
-        // Удаление статьи
-        function deleteArticle(id) {
-            if (confirm('Вы уверены, что хотите удалить эту статью?')) {
-                fetch('./articles.json')
-                    .then(response => response.json())
-                    .then(articles => {
-                        const updatedArticles = articles.filter(article => article.id !== id);
-                        updateArticlesFile(updatedArticles);
-                    });
-            }
-        }
-
-        // Сохранение статьи
-        document.getElementById('articleForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const articles = JSON.parse(localStorage.getItem('articles') || '[]');
-            const formData = {
-                id: currentArticleId || Math.max(...articles.map(a => a.id), 0) + 1,
-                slug: document.getElementById('articleSlug').value,
-                title: document.getElementById('articleTitle').value,
-                excerpt: document.getElementById('articleExcerpt').value,
-                author: document.getElementById('articleAuthor').value,
-                date: document.getElementById('articleDate').value,
-                icon: document.getElementById('articleIcon').value,
-                category: document.getElementById('articleCategory').value,
-                tags: currentTags,
-                previewImage: document.getElementById('articlePreviewImage').value,
-                content: document.getElementById('articleContent').value
-            };
-
-            let updatedArticles;
-            if (currentArticleId) {
-                // Редактирование существующей статьи
-                updatedArticles = articles.map(article => 
-                    article.id === currentArticleId ? formData : article
-                );
+                
+                // Обработчик клика по кнопке входа
+                loginButton.addEventListener('click', function() {
+                    console.log('Открываем окно входа');
+                    window.netlifyIdentity.open();
+                });
+                
+                // Обработчик успешного входа
+                window.netlifyIdentity.on('login', function(user) {
+                    console.log('Пользователь вошел:', user);
+                    
+                    // Скрываем кнопку и показываем загрузку
+                    loginButton.style.display = 'none';
+                    successMessage.textContent = 'Вход выполнен успешно! Загружаем редактор...';
+                    successMessage.style.display = 'block';
+                    loading.style.display = 'block';
+                    
+                    // Ждем 1 секунду и показываем CMS
+                    setTimeout(function() {
+                        showCMS();
+                    }, 1000);
+                });
+                
+                // Обработчик выхода
+                window.netlifyIdentity.on('logout', function() {
+                    console.log('Пользователь вышел');
+                    // Перезагружаем страницу
+                    window.location.reload();
+                });
+                
+                // Обработчик ошибок
+                window.netlifyIdentity.on('error', function(err) {
+                    console.error('Ошибка Netlify Identity:', err);
+                    errorMessage.textContent = 'Ошибка входа: ' + (err.message || 'Неизвестная ошибка');
+                    errorMessage.style.display = 'block';
+                    loading.style.display = 'none';
+                });
+                
             } else {
-                // Новая статья
-                updatedArticles = [...articles, formData];
+                console.error('Netlify Identity не загружен');
+                errorMessage.textContent = 'Не удалось загрузить систему входа. Пожалуйста, проверьте подключение к интернету и обновите страницу.';
+                errorMessage.style.display = 'block';
+                loginButton.style.display = 'none';
             }
-
-            updateArticlesFile(updatedArticles);
-        });
-
-        // Обновление файла статей
-        function updateArticlesFile(articles) {
-            // В реальном приложении здесь будет запрос к GitHub API
-            // Для демонстрации сохраняем в localStorage
-            localStorage.setItem('articles', JSON.stringify(articles));
             
-            // Имитация успешного сохранения
-            showStatus('Статья успешно сохранена!', 'success');
-            setTimeout(() => {
-                showSection('articles');
-                loadArticles();
-            }, 2000);
-        }
-
-        function showStatus(message, type) {
-            // Удалить существующие сообщения
-            const existingStatus = document.querySelector('.status-message');
-            if (existingStatus) {
-                existingStatus.remove();
+            // Функция для отображения CMS
+            function showCMS() {
+                console.log('Показываем CMS');
+                
+                // Скрываем контейнер входа
+                loginContainer.style.display = 'none';
+                loading.style.display = 'none';
+                successMessage.style.display = 'none';
+                
+                // Показываем корневой элемент CMS
+                cmsRoot.style.display = 'block';
+                
+                // Проверяем, загружен ли Netlify CMS
+                if (typeof NetlifyCMS !== 'undefined') {
+                    console.log('Netlify CMS доступна, инициализируем...');
+                    
+                    // Инициализируем CMS
+                    try {
+                        NetlifyCMS.init();
+                        console.log('Netlify CMS инициализирована успешно');
+                    } catch (error) {
+                        console.error('Ошибка инициализации CMS:', error);
+                        errorMessage.textContent = 'Ошибка загрузки редактора: ' + error.message;
+                        errorMessage.style.display = 'block';
+                        loginContainer.style.display = 'block';
+                        cmsRoot.style.display = 'none';
+                    }
+                } else {
+                    console.error('Netlify CMS не загружена');
+                    errorMessage.textContent = 'Не удалось загрузить редактор статей. Пожалуйста, обновите страницу.';
+                    errorMessage.style.display = 'block';
+                    loginContainer.style.display = 'block';
+                    cmsRoot.style.display = 'none';
+                }
             }
-
-            const status = document.createElement('div');
-            status.className = `status-message status-${type}`;
-            status.textContent = message;
             
-            document.querySelector('.admin-content').prepend(status);
-        }
-
-        // Автогенерация slug из заголовка
-        document.getElementById('articleTitle').addEventListener('input', function() {
-            if (!document.getElementById('articleSlug').value) {
-                const slug = this.value
-                    .toLowerCase()
-                    .replace(/[^\w\u0400-\u04FF]+/g, '-')
-                    .replace(/^-+|-+$/g, '');
-                document.getElementById('articleSlug').value = slug;
-            }
-        });
-
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', function() {
-            initAuth();
-            updateTagsDisplay();
+            // Также пытаемся показать CMS, если пользователь уже был авторизован
+            // Это нужно на случай, если страница была перезагружена
+            setTimeout(function() {
+                if (window.netlifyIdentity) {
+                    const user = window.netlifyIdentity.currentUser();
+                    if (user && cmsRoot.style.display === 'none') {
+                        console.log('Пользователь уже вошел (проверка через таймаут), показываем CMS');
+                        showCMS();
+                    }
+                }
+            }, 500);
         });
     </script>
 </body>

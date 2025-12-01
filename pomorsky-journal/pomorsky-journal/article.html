@@ -6,7 +6,7 @@
     <title>Инакой - Статья</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Базовые стили с этническими мотивами */
+        /* БАЗОВЫЕ СТИЛИ */
         :root {
             --color-navy: #1a237e;
             --color-ocean: #1565c0;
@@ -22,7 +22,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
@@ -48,7 +48,7 @@
             pointer-events: none;
             z-index: -1;
         }
-        
+
         .app {
             max-width: 1000px;
             margin: 0 auto;
@@ -57,10 +57,9 @@
             width: 100%;
         }
 
-        /* Навигация */
+        /* НАВИГАЦИЯ */
         .main-nav {
             background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.95) 100%);
-            backdrop-filter: blur(10px);
             padding: 15px 0;
             margin-bottom: 30px;
             border-radius: 15px;
@@ -75,6 +74,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
 
         .nav-logo {
@@ -85,10 +85,61 @@
             font-weight: 700;
         }
 
+        /* ГАМБУРГЕР КНОПКА */
+        .hamburger {
+            display: none;
+            width: 30px;
+            height: 20px;
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--color-navy);
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span:nth-child(1) {
+            top: 0;
+        }
+
+        .hamburger span:nth-child(2) {
+            top: 9px;
+        }
+
+        .hamburger span:nth-child(3) {
+            top: 18px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 9px;
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 9px;
+        }
+
+        /* ОБЫЧНОЕ МЕНЮ */
         .nav-links {
             display: flex;
             gap: 30px;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-links a {
@@ -98,6 +149,7 @@
             padding: 8px 16px;
             border-radius: 25px;
             transition: all 0.3s ease;
+            display: block;
         }
 
         .nav-links a:hover {
@@ -108,13 +160,64 @@
         .admin-link {
             background: var(--color-red);
             color: white !important;
-            font-size: 0.9rem;
         }
 
         .admin-link:hover {
             background: #b71c1c !important;
         }
-        
+
+        /* МОБИЛЬНОЕ МЕНЮ */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                z-index: 1002;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 250px;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                transition: right 0.4s ease;
+                z-index: 1001;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                width: 180px;
+                text-align: center;
+                font-size: 1.1rem;
+                padding: 12px 20px;
+            }
+
+            /* ОВЕРЛЕЙ */
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1000;
+                display: none;
+            }
+
+            .menu-overlay.active {
+                display: block;
+            }
+        }
+
+        /* СТИЛИ ДЛЯ СТАТЬИ */
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -132,14 +235,14 @@
             height: 2px;
             background: linear-gradient(90deg, transparent, var(--color-navy), transparent);
         }
-        
+
         .header h1 {
             font-family: 'Playfair Display', serif;
             font-size: 2.8rem;
             color: var(--color-navy);
             margin-bottom: 10px;
         }
-        
+
         .header p {
             font-size: 1.1rem;
             color: var(--color-ocean);
@@ -167,7 +270,7 @@
             height: 4px;
             background: linear-gradient(90deg, var(--color-navy), var(--color-ocean));
         }
-        
+
         .article-header {
             margin-bottom: 40px;
             position: relative;
@@ -182,7 +285,7 @@
             height: 3px;
             background: linear-gradient(90deg, var(--color-navy), transparent);
         }
-        
+
         .article-title {
             font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
@@ -190,7 +293,7 @@
             margin-bottom: 20px;
             line-height: 1.2;
         }
-        
+
         .article-meta {
             color: var(--color-ocean);
             font-size: 1rem;
@@ -198,6 +301,7 @@
             display: flex;
             gap: 20px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .article-category {
@@ -214,7 +318,7 @@
         .article-author {
             font-weight: 600;
         }
-        
+
         .article-content {
             font-size: 1.15rem;
             line-height: 1.8;
@@ -224,7 +328,7 @@
         .article-content p {
             margin-bottom: 1.5em;
         }
-        
+
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -238,9 +342,8 @@
             border-radius: 50px;
             transition: all 0.3s ease;
             background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
         }
-        
+
         .back-button:hover {
             background-color: var(--color-navy);
             color: white;
@@ -343,7 +446,7 @@
             gap: 25px;
             margin: 35px 0;
         }
-        
+
         .gallery-item {
             text-align: center;
             position: relative;
@@ -383,6 +486,7 @@
 
         .footer-links {
             list-style: none;
+            padding: 0;
         }
 
         .footer-links li {
@@ -453,13 +557,51 @@
 
         /* Адаптивность */
         @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
+            .hamburger {
+                display: block;
+                z-index: 1002;
             }
 
             .nav-links {
-                gap: 15px;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 250px;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                transition: right 0.4s ease;
+                z-index: 1001;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                width: 180px;
+                text-align: center;
+                font-size: 1.1rem;
+                padding: 12px 20px;
+            }
+
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1000;
+                display: none;
+            }
+
+            .menu-overlay.active {
+                display: block;
             }
 
             .article-image img[src*=".png"] {
@@ -534,15 +676,22 @@
     </style>
 </head>
 <body>
+    <!-- Оверлей для меню -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
     <nav class="main-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Инакой</a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="about.html">О проекте</a></li>
-                <li><a href="authors.html">Авторам</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
-                <li><a href="admin/" class="admin-link">Админка</a></li>
+                <li><a href="admin/" class="admin-link">Авторам</a></li>
             </ul>
         </div>
     </nav>
@@ -589,10 +738,10 @@
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>Авторам</h3>
+                <h3>Полезные ссылки</h3>
                 <ul class="footer-links">
-                    <li><a href="authors.html">📝 Правила публикации</a></li>
-                    <li><a href="#collaboration">🤝 Сотрудничество</a></li>
+                    <li><a href="about.html">📖 О проекте</a></li>
+                    <li><a href="contacts.html">📞 Контакты</a></li>
                     <li><a href="#research">🔬 Исследования</a></li>
                 </ul>
             </div>
@@ -603,7 +752,69 @@
     </footer>
 
     <script>
-        // Загрузка и отображение статьи
+        // КОД ДЛЯ МЕНЮ - ТАКОЙ ЖЕ КАК В INDEX.HTML
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            // Функция для открытия меню
+            function openMenu() {
+                hamburger.classList.add('active');
+                navLinks.classList.add('active');
+                menuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Блокируем скролл
+            }
+            
+            // Функция для закрытия меню
+            function closeMenu() {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = ''; // Разблокируем скролл
+            }
+            
+            // Переключаем меню по клику на гамбургер
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation(); // Останавливаем всплытие
+                
+                if (navLinks.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            
+            // Закрываем меню по клику на оверлей
+            menuOverlay.addEventListener('click', function() {
+                closeMenu();
+            });
+            
+            // Закрываем меню по клику на ссылку
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    closeMenu();
+                });
+            });
+            
+            // Закрываем меню по нажатию ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+            
+            // Закрываем меню при клике вне меню
+            document.addEventListener('click', function(e) {
+                if (navLinks.classList.contains('active') && 
+                    !navLinks.contains(e.target) && 
+                    !hamburger.contains(e.target)) {
+                    closeMenu();
+                }
+            });
+        });
+
+        // КОД ДЛЯ ЗАГРУЗКИ СТАТЬИ
         async function loadArticle() {
             try {
                 // Имитация загрузки для демонстрации скелетона
@@ -636,6 +847,8 @@
         function displayArticle(article) {
             const container = document.getElementById('articleContainer');
             
+            if (!container) return;
+            
             // Обновляем заголовок страницы
             document.title = `${article.title} - Инакой`;
             
@@ -649,14 +862,18 @@
                     </div>
                 </div>
                 <div class="article-content">
-                    ${article.content}
+                    ${article.content || '<p>Содержание статьи не найдено.</p>'}
                 </div>
             `;
         }
 
         function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString('ru-RU', options);
+            try {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString('ru-RU', options);
+            } catch (e) {
+                return dateString;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', loadArticle);
