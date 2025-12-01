@@ -5,17 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Инакой - Панель для авторов</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: 20px;
     }
     
     .admin-container {
@@ -25,7 +29,7 @@
       border-radius: 20px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
       max-width: 400px;
-      width: 90%;
+      width: 100%;
     }
     
     .logo {
@@ -50,6 +54,9 @@
       font-size: 1rem;
       cursor: pointer;
       transition: all 0.3s ease;
+      margin-bottom: 20px;
+      display: inline-block;
+      text-decoration: none;
     }
     
     .netlify-identity-button:hover {
@@ -62,6 +69,16 @@
       margin-top: 30px;
       color: #666;
       font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    .error {
+      color: #c62828;
+      margin-top: 20px;
+      padding: 10px;
+      background: #ffebee;
+      border-radius: 5px;
+      display: none;
     }
   </style>
 </head>
@@ -69,21 +86,47 @@
   <div class="admin-container">
     <div class="logo">Инакой</div>
     <div class="title">Панель для авторов</div>
-    <div data-netlify-identity-button>Войти для публикации статей</div>
-    <div class="info">Для публикации статей требуется доступ от редакции</div>
+    <div class="netlify-identity-button" id="loginButton">Войти для публикации статей</div>
+    <div class="error" id="errorMessage"></div>
+    <div class="info">
+      Для публикации статей требуется доступ от редакции.<br>
+      Если у вас нет доступа, свяжитесь с редакцией через <a href="../contacts.html" style="color: #1a237e;">форму контактов</a>.
+    </div>
   </div>
   
   <script>
+    // Инициализация Netlify Identity
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/#/collections/articles";
-          });
-        } else {
-          document.location.href = "/admin/#/collections/articles";
+      window.netlifyIdentity.init();
+      
+      // Обработчик кнопки входа
+      document.getElementById('loginButton').addEventListener('click', function() {
+        window.netlifyIdentity.open();
+      });
+      
+      // Обработчик событий входа
+      window.netlifyIdentity.on('login', function(user) {
+        console.log('Пользователь вошел:', user);
+        // Перенаправляем в CMS
+        window.location.href = "/admin/#/collections/articles";
+      });
+      
+      // Обработчик ошибок
+      window.netlifyIdentity.on('error', function(err) {
+        console.error('Ошибка Netlify Identity:', err);
+        document.getElementById('errorMessage').textContent = 'Ошибка входа: ' + err.message;
+        document.getElementById('errorMessage').style.display = 'block';
+      });
+      
+      // Если пользователь уже вошел, перенаправляем сразу
+      window.netlifyIdentity.on('init', function(user) {
+        if (user) {
+          window.location.href = "/admin/#/collections/articles";
         }
       });
+    } else {
+      document.getElementById('errorMessage').textContent = 'Netlify Identity не загружен. Проверьте подключение к интернету.';
+      document.getElementById('errorMessage').style.display = 'block';
     }
   </script>
 </body>
