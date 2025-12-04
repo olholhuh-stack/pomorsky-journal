@@ -1,27 +1,6 @@
 [build]
   publish = "."
-  functions = "netlify/functions"
-
-[build.environment]
-  # Переменные окружения, если нужны
-  NODE_VERSION = "18"
 
 [[redirects]]
   from = "/admin/*"
   to = "/admin/index.html"
-  status = 200
-
-[[headers]]
-  for = "/admin/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://identity.netlify.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.netlify.com"
-
-# Настройки для Netlify Identity
-[context.production.environment]
-  NETLIFY_IDENTITY_URL = "https://ваш-сайт.netlify.app/.netlify/identity"
-
-# Настройки для Git Gateway
-[[plugins]]
-  package = "@netlify/plugin-git-gateway"
