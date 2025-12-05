@@ -1,0 +1,6 @@
+/*    /index.html   200
+/about.html    /about.html   200
+/authors.html  /authors.html 200
+/contacts.html /contacts.html 200
+/article.html  /article.html 200
+/admin/*       /admin/index.html   200
