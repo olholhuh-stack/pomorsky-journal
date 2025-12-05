@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Инакой - Панель для авторов</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #1a237e;
+            margin-bottom: 20px;
+        }
+        
+        .title {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+        
+        .login-button {
+            background: #1a237e;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .login-button:hover {
+            background: #0d47a1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+        }
+        
+        .info {
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .error {
+            color: #c62828;
+            margin-top: 20px;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .loading {
+            margin-top: 20px;
+            color: #666;
+            display: none;
+        }
+        
+        .success {
+            color: #388e3c;
+            margin-top: 20px;
+            padding: 10px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        /* Стили для самой CMS */
+        #nc-root {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            background: white;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container" id="loginContainer">
+        <div class="logo">Инакой</div>
+        <div class="title">Панель для авторов</div>
+        <button class="login-button" id="loginButton">Войти для публикации статей</button>
+        <div class="loading" id="loading">Загрузка панели управления...</div>
+        <div class="success" id="successMessage"></div>
+        <div class="error" id="errorMessage"></div>
+        <div class="info">
+            Для публикации статей требуется доступ от редакции.<br>
+            Если у вас нет доступа, свяжитесь с редакцией через <a href="../contacts.html" style="color: #1a237e; text-decoration: none;">форму контактов</a>.
+        </div>
+    </div>
+
+    <div id="nc-root" style="display: none;"></div>
+    
+    <!-- Netlify CMS скрипт -->
+    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+    
+    <script>
+        // ПРОСТОЙ И РАБОЧИЙ КОД ДЛЯ АДМИН-ПАНЕЛИ
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginContainer = document.getElementById('loginContainer');
+            const loginButton = document.getElementById('loginButton');
+            const loading = document.getElementById('loading');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const cmsRoot = document.getElementById('nc-root');
+            
+            console.log('Страница админки загружена');
+            
+            // Проверяем, доступен ли Netlify Identity
+            if (window.netlifyIdentity) {
+                console.log('Netlify Identity доступен');
+                
+                // Инициализируем Identity
+                window.netlifyIdentity.init();
+                
+                // Проверяем статус пользователя при загрузке
+                window.netlifyIdentity.on('init', function(user) {
+                    console.log('Identity инициализирован, пользователь:', user);
+                    
+                    if (user) {
+                        // Пользователь уже вошел - показываем CMS
+                        console.log('Пользователь уже вошел, загружаем CMS');
+                        showCMS();
+                    } else {
+                        // Пользователь не вошел - показываем кнопку входа
+                        console.log('Пользователь не вошел, показываем кнопку входа');
+                        loginContainer.style.display = 'block';
+                        loginButton.style.display = 'inline-block';
+                    }
+                });
+                
+                // Обработчик клика по кнопке входа
+                loginButton.addEventListener('click', function() {
+                    console.log('Открываем окно входа');
+                    window.netlifyIdentity.open();
+                });
+                
+                // Обработчик успешного входа
+                window.netlifyIdentity.on('login', function(user) {
+                    console.log('Пользователь вошел:', user);
+                    
+                    // Скрываем кнопку и показываем загрузку
+                    loginButton.style.display = 'none';
+                    successMessage.textContent = 'Вход выполнен успешно! Загружаем редактор...';
+                    successMessage.style.display = 'block';
+                    loading.style.display = 'block';
+                    
+                    // Ждем 1 секунду и показываем CMS
+                    setTimeout(function() {
+                        showCMS();
+                    }, 1000);
+                });
+                
+                // Обработчик выхода
+                window.netlifyIdentity.on('logout', function() {
+                    console.log('Пользователь вышел');
+                    // Перезагружаем страницу
+                    window.location.reload();
+                });
+                
+                // Обработчик ошибок
+                window.netlifyIdentity.on('error', function(err) {
+                    console.error('Ошибка Netlify Identity:', err);
+                    errorMessage.textContent = 'Ошибка входа: ' + (err.message || 'Неизвестная ошибка');
+                    errorMessage.style.display = 'block';
+                    loading.style.display = 'none';
+                });
+                
+            } else {
+                console.error('Netlify Identity не загружен');
+                errorMessage.textContent = 'Не удалось загрузить систему входа. Пожалуйста, проверьте подключение к интернету и обновите страницу.';
+                errorMessage.style.display = 'block';
+                loginButton.style.display = 'none';
+            }
+            
+            // Функция для отображения CMS
+            function showCMS() {
+                console.log('Показываем CMS');
+                
+                // Скрываем контейнер входа
+                loginContainer.style.display = 'none';
+                loading.style.display = 'none';
+                successMessage.style.display = 'none';
+                
+                // Показываем корневой элемент CMS
+                cmsRoot.style.display = 'block';
+                
+                // Проверяем, загружен ли Netlify CMS
+                if (typeof NetlifyCMS !== 'undefined') {
+                    console.log('Netlify CMS доступна, инициализируем...');
+                    
+                    // Инициализируем CMS
+                    try {
+                        NetlifyCMS.init();
+                        console.log('Netlify CMS инициализирована успешно');
+                    } catch (error) {
+                        console.error('Ошибка инициализации CMS:', error);
+                        errorMessage.textContent = 'Ошибка загрузки редактора: ' + error.message;
+                        errorMessage.style.display = 'block';
+                        loginContainer.style.display = 'block';
+                        cmsRoot.style.display = 'none';
+                    }
+                } else {
+                    console.error('Netlify CMS не загружена');
+                    errorMessage.textContent = 'Не удалось загрузить редактор статей. Пожалуйста, обновите страницу.';
+                    errorMessage.style.display = 'block';
+                    loginContainer.style.display = 'block';
+                    cmsRoot.style.display = 'none';
+                }
+            }
+            
+            // Также пытаемся показать CMS, если пользователь уже был авторизован
+            // Это нужно на случай, если страница была перезагружена
+            setTimeout(function() {
+                if (window.netlifyIdentity) {
+                    const user = window.netlifyIdentity.currentUser();
+                    if (user && cmsRoot.style.display === 'none') {
+                        console.log('Пользователь уже вошел (проверка через таймаут), показываем CMS');
+                        showCMS();
+                    }
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
