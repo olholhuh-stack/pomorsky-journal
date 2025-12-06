@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Инакой - Статья</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Подключаем библиотеку для преобразования Markdown в HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* БАЗОВЫЕ СТИЛИ */
         :root {
@@ -329,6 +331,42 @@
             margin-bottom: 1.5em;
         }
 
+        .article-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--color-navy);
+            margin: 2em 0 1em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--color-ice);
+        }
+
+        .article-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--color-dark);
+            margin: 1.5em 0 0.8em;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5em;
+            padding-left: 2em;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5em;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--color-ocean);
+            padding-left: 1.5em;
+            margin: 2em 0;
+            font-style: italic;
+            color: #546e7a;
+            background: rgba(227, 242, 253, 0.3);
+            padding: 1.5em;
+            border-radius: 0 10px 10px 0;
+        }
+
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -351,116 +389,6 @@
             box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
         }
 
-        /* Базовые стили для изображений с этническим акцентом */
-        .article-image {
-            margin: 40px 0;
-            text-align: center;
-            position: relative;
-        }
-
-        .article-image::before {
-            content: "🌊";
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.5rem;
-            opacity: 0.3;
-            z-index: 1;
-        }
-
-        .article-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 16px;
-            box-shadow: 
-                0 8px 25px rgba(0,0,0,0.12),
-                0 4px 12px rgba(0,0,0,0.08);
-            transition: all 0.4s ease;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-
-        .image-caption {
-            margin-top: 15px;
-            font-size: 0.95rem;
-            color: var(--color-ocean);
-            font-style: italic;
-            max-width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Специальные стили для PNG изображений */
-        .article-image img[src*=".png"] {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            background-color: #ffffff;
-            padding: 15px;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        /* Для схем и диаграмм добавляем границу */
-        .article-image img[src*="scheme"],
-        .article-image img[src*="diagram"],
-        .article-image img[src*="map"] {
-            border: 2px solid #e9ecef;
-            background: linear-gradient(145deg, #f8f9fa, #ffffff);
-            padding: 10px;
-        }
-
-        /* Стили для инфографики */
-        .infographic {
-            background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-ocean) 100%);
-            padding: 30px;
-            border-radius: 20px;
-            margin: 35px 0;
-            box-shadow: 0 10px 30px rgba(21, 101, 192, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .infographic::before {
-            content: "⚡";
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 2rem;
-            opacity: 0.2;
-        }
-
-        .infographic img {
-            box-shadow: none !important;
-            background: transparent !important;
-            border-radius: 12px;
-        }
-
-        /* Улучшаем отображение PNG в галерее */
-        .gallery-item img[src*=".png"] {
-            background-color: #ffffff;
-            padding: 8px;
-        }
-
-        /* Стили для галереи */
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin: 35px 0;
-        }
-
-        .gallery-item {
-            text-align: center;
-            position: relative;
-        }
-
-        .gallery-item::before {
-            content: "✨";
-            position: absolute;
-            top: -10px;
-            right: 10px;
-            opacity: 0.3;
-        }
-
-        /* Футер */
         .footer {
             background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-dark) 100%);
             color: white;
@@ -603,14 +531,6 @@
             .menu-overlay.active {
                 display: block;
             }
-
-            .article-image img[src*=".png"] {
-                padding: 8px;
-            }
-            
-            .article-image img[src*="scheme"] {
-                min-width: 280px;
-            }
             
             .article-container {
                 padding: 30px 25px;
@@ -618,10 +538,6 @@
             
             .article-title {
                 font-size: 2rem;
-            }
-            
-            .image-gallery {
-                grid-template-columns: 1fr;
             }
             
             .header h1 {
@@ -633,45 +549,6 @@
                 align-items: flex-start;
                 gap: 10px;
             }
-        }
-
-        /* Подсветка при наведении для изображений */
-        .article-image img:hover {
-            transform: scale(1.02);
-            box-shadow: 
-                0 12px 35px rgba(0,0,0,0.15),
-                0 6px 15px rgba(0,0,0,0.1);
-        }
-        
-        /* Дополнительные классы для позиционирования изображений */
-        .image-center {
-            text-align: center;
-        }
-        
-        .image-left {
-            text-align: left;
-        }
-        
-        .image-right {
-            text-align: right;
-        }
-        
-        .image-small {
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .image-medium {
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .image-large {
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
         }
     </style>
 </head>
@@ -691,7 +568,7 @@
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="about.html">О проекте</a></li>
                 <li><a href="contacts.html">Контакты</a></li>
-                <li><a href="admin/" class="admin-link">Авторам</a></li>
+                <li><a href="admin/index.html" class="admin-link">Авторам</a></li>
             </ul>
         </div>
     </nav>
@@ -752,7 +629,7 @@
     </footer>
 
     <script>
-        // КОД ДЛЯ МЕНЮ - ТАКОЙ ЖЕ КАК В INDEX.HTML
+        // КОД ДЛЯ МЕНЮ
         document.addEventListener('DOMContentLoaded', function() {
             const hamburger = document.getElementById('hamburger');
             const navLinks = document.getElementById('navLinks');
@@ -763,7 +640,7 @@
                 hamburger.classList.add('active');
                 navLinks.classList.add('active');
                 menuOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Блокируем скролл
+                document.body.style.overflow = 'hidden';
             }
             
             // Функция для закрытия меню
@@ -771,12 +648,12 @@
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('active');
                 menuOverlay.classList.remove('active');
-                document.body.style.overflow = ''; // Разблокируем скролл
+                document.body.style.overflow = '';
             }
             
             // Переключаем меню по клику на гамбургер
             hamburger.addEventListener('click', function(e) {
-                e.stopPropagation(); // Останавливаем всплытие
+                e.stopPropagation();
                 
                 if (navLinks.classList.contains('active')) {
                     closeMenu();
@@ -814,40 +691,82 @@
             });
         });
 
-        // КОД ДЛЯ ЗАГРУЗКИ СТАТЬИ
+        // КОД ДЛЯ ЗАГРУЗКИ СТАТЬИ ИЗ MARKDOWN
         async function loadArticle() {
             try {
                 // Имитация загрузки для демонстрации скелетона
                 await new Promise(resolve => setTimeout(resolve, 800));
                 
                 const urlParams = new URLSearchParams(window.location.search);
-                const articleId = urlParams.get('id');
+                const articleSlug = urlParams.get('slug');
                 
-                if (!articleId) {
-                    document.getElementById('articleContainer').innerHTML = '<p>Статья не найдена.</p>';
+                console.log('Пытаемся загрузить статью с slug:', articleSlug);
+                
+                if (!articleSlug) {
+                    document.getElementById('articleContainer').innerHTML = '<p>Статья не найдена (отсутствует slug в URL).</p>';
                     return;
                 }
 
-                const response = await fetch('articles.json');
+                // Загружаем список статей
+                const response = await fetch('articles-list.json');
+                console.log('Ответ от articles-list.json:', response);
+                
+                if (!response.ok) {
+                    throw new Error(`Ошибка загрузки списка статей: ${response.status}`);
+                }
+                
                 const articles = await response.json();
-                const article = articles.find(a => a.id == articleId);
+                console.log('Загруженный список статей:', articles);
+                
+                // Ищем статью по slug
+                const article = articles.find(a => a.slug === articleSlug);
+                console.log('Найдена статья:', article);
                 
                 if (!article) {
-                    document.getElementById('articleContainer').innerHTML = '<p>Статья не найдена.</p>';
+                    document.getElementById('articleContainer').innerHTML = '<p>Статья не найдена в списке статей.</p>';
                     return;
                 }
 
-                displayArticle(article);
+                // Загружаем markdown файл
+                const mdResponse = await fetch(`articles/${articleSlug}.md`);
+                console.log('Ответ от markdown файла:', mdResponse);
+                
+                if (!mdResponse.ok) {
+                    throw new Error(`Не удалось загрузить файл статьи: ${mdResponse.status}`);
+                }
+                
+                const markdownText = await mdResponse.text();
+                console.log('Загруженный markdown текст (первые 500 символов):', markdownText.substring(0, 500));
+                
+                // Преобразуем markdown в HTML
+                marked.setOptions({
+                    gfm: true,
+                    breaks: true,
+                    sanitize: false,
+                    langPrefix: 'language-'
+                });
+                
+                const contentHtml = marked.parse(markdownText);
+                console.log('Markdown успешно преобразован в HTML');
+                
+                displayArticle(article, contentHtml);
             } catch (error) {
-                console.error('Ошибка загрузки статьи:', error);
-                document.getElementById('articleContainer').innerHTML = '<p>Ошибка загрузки статьи.</p>';
+                console.error('Полная ошибка загрузки статьи:', error);
+                document.getElementById('articleContainer').innerHTML = 
+                    `<p style="color: #c62828; text-align: center; padding: 40px;">
+                        Ошибка загрузки статьи: ${error.message}<br>
+                        Проверьте консоль браузера для подробностей.
+                    </p>`;
             }
         }
 
-        function displayArticle(article) {
+        function displayArticle(article, contentHtml) {
             const container = document.getElementById('articleContainer');
             
-            if (!container) return;
+            if (!container) {
+                console.error('Контейнер статьи не найден!');
+                return;
+            }
             
             // Обновляем заголовок страницы
             document.title = `${article.title} - Инакой`;
@@ -862,7 +781,7 @@
                     </div>
                 </div>
                 <div class="article-content">
-                    ${article.content || '<p>Содержание статьи не найдено.</p>'}
+                    ${contentHtml}
                 </div>
             `;
         }
@@ -876,6 +795,7 @@
             }
         }
 
+        // Загружаем статью при загрузке страницы
         document.addEventListener('DOMContentLoaded', loadArticle);
     </script>
 
