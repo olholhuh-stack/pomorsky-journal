@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "slug": "zimnyaya-vojna-dekolonialnyj-vzglyad",
+    "title": "Зимняя война через призму деколониальной теории",
+    "excerpt": "Анализ советско-финской войны 1939-1940 годов с позиции деколониальных исследований и постколониальной теории.",
+    "author": "Семён Чирман",
+    "date": "2025-12-06",
+    "category": "история",
+    "previewImage": "images/previews/preview-1.png",
+    "contentFile": "articles/zimnyaya-vojna.md",
+    "tags": ["финляндия", "советский союз", "зимняя война", "империализм", "деколониальность"]
+  },
+  {
+    "id": 2,
+    "slug": "pomorskaya-identichnost-v-sovremennom-mire",
+    "title": "Поморская идентичность в современном мире",
+    "excerpt": "Как поморское сообщество сохраняет свою уникальность в условиях глобализации и что значит быть поморами сегодня.",
+    "author": "Анна Петрова",
+    "date": "2025-11-20",
+    "category": "идентичность",
+    "previewImage": "images/previews/preview-2.png",
+    "contentFile": "articles/pomorskaya-identichnost.md",
+    "tags": ["поморы", "идентичность", "север", "традиции", "культура"]
+  },
+  {
+    "id": 3,
+    "slug": "drevo-v-pomorskoj-kulture",
+    "title": "Символика дерева в поморской культуре",
+    "excerpt": "Дерево как центральный элемент поморской мифологии, обрядов и хозяйственной деятельности.",
+    "author": "Иван Беломорский",
+    "date": "2025-10-15",
+    "category": "культура",
+    "previewImage": "images/previews/preview-3.png",
+    "contentFile": "articles/drevo-pomorskoj-kultury.md",
+    "tags": ["культура", "мифология", "обряды", "ремесла", "символика"]
+  }
+]

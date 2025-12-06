@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О проекте - Инакой</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;350;400;450;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* БАЗОВЫЕ СТИЛИ */
+        :root {
+            --color-black: #000000;
+            --color-white: #ffffff;
+            --color-gray: #777777;
+            --color-gray-light: #f8f8f8;
+            --color-border: #e0e0e0;
+            --color-accent: #8B0000;
+            --color-accent-light: #a52a2a;
+            --color-accent-bg: #fff8f8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            color: var(--color-black);
+            background-color: var(--color-white);
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+
+        .app {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        /* НАВИГАЦИЯ */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--color-white);
+            border-bottom: 1px solid var(--color-border);
+            z-index: 1000;
+            padding: 20px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* ГАМБУРГЕР */
+        .hamburger {
+            display: none;
+            width: 30px;
+            height: 20px;
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--color-accent);
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span:nth-child(1) { top: 0; }
+        .hamburger span:nth-child(2) { top: 9px; }
+        .hamburger span:nth-child(3) { top: 18px; }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 9px;
+        }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 9px;
+        }
+
+        /* МЕНЮ */
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--color-black);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.95rem;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .admin-link {
+            background-color: var(--color-accent);
+            color: var(--color-white) !important;
+            padding: 8px 20px !important;
+            border: 1px solid var(--color-accent);
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            background-color: var(--color-white);
+            color: var(--color-accent) !important;
+        }
+
+        /* МОБИЛЬНОЕ МЕНЮ */
+        @media (max-width: 768px) {
+            .app, .nav-container {
+                padding: 0 20px;
+            }
+            
+            .hamburger { display: block; }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: var(--color-white);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                gap: 0;
+                transition: right 0.4s ease;
+                z-index: 1001;
+                padding-top: 80px;
+                border-left: 1px solid var(--color-border);
+            }
+            
+            .nav-links.active { right: 0; }
+            
+            .nav-links a {
+                width: 100%;
+                padding: 15px 30px;
+                border-bottom: 1px solid var(--color-border);
+                font-size: 1.1rem;
+            }
+            
+            .menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1000;
+                display: none;
+            }
+            
+            .menu-overlay.active { display: block; }
+        }
+
+        /* КНОПКА НАЗАД */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 120px 0 30px 0;
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 24px;
+            border: 2px solid var(--color-accent);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .back-button:hover {
+            background-color: var(--color-accent);
+            color: var(--color-white);
+            transform: translateX(-5px);
+        }
+
+        /* СОДЕРЖАНИЕ СТРАНИЦЫ */
+        .page-container {
+            margin-bottom: 80px;
+        }
+
+        .page-header {
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: var(--color-black);
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--color-gray);
+            line-height: 1.6;
+        }
+
+        .page-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--color-black);
+        }
+
+        .page-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--color-accent);
+            margin: 50px 0 20px 0;
+            font-weight: 600;
+        }
+
+        .page-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--color-black);
+            margin: 40px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .page-content p {
+            margin-bottom: 25px;
+        }
+
+        .page-content blockquote {
+            border-left: 4px solid var(--color-accent);
+            padding-left: 25px;
+            margin: 30px 0;
+            font-style: italic;
+            color: var(--color-gray);
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .page-content ul, .page-content ol {
+            margin: 20px 0 20px 20px;
+        }
+
+        .page-content li {
+            margin-bottom: 10px;
+        }
+
+        .mission-block {
+            background-color: var(--color-accent-bg);
+            padding: 40px;
+            margin: 40px 0;
+            border-radius: 4px;
+            border-left: 4px solid var(--color-accent);
+        }
+
+        .values-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .value-item {
+            padding: 25px;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .value-item:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--color-accent);
+        }
+
+        .value-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--color-black);
+        }
+
+        /* ФУТЕР */
+        .footer {
+            background-color: var(--color-gray-light);
+            padding: 80px 0 40px;
+            margin-top: 60px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 50px;
+        }
+
+        .footer-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .footer-section p {
+            line-height: 1.6;
+            font-size: 0.95rem;
+            color: var(--color-gray);
+            font-weight: 400;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--color-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 60px auto 0;
+            padding: 30px 40px 0;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+            color: var(--color-gray);
+            font-size: 0.9rem;
+        }
+
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 768px) {
+            .app {
+                max-width: 100%;
+            }
+            
+            .page-title {
+                font-size: 2.2rem;
+            }
+            
+            .mission-block {
+                padding: 30px 20px;
+            }
+            
+            .values-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app {
+                padding: 0 20px;
+            }
+            
+            .page-title {
+                font-size: 1.8rem;
+            }
+            
+            .page-content {
+                font-size: 1rem;
+            }
+            
+            .back-button {
+                margin-top: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Оверлей для меню -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Инакой</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html" class="active">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+                <li><a href="admin/index.html" class="admin-link">Авторам</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="app">
+        <a href="index.html" class="back-button">← На главную</a>
+        
+        <div class="page-container">
+            <div class="page-header">
+                <h1 class="page-title">О проекте</h1>
+                <p class="page-subtitle">Журнал поморской культуры и деколониальной мысли</p>
+            </div>
+            
+            <div class="page-content">
+                <p><strong>Инакой</strong> — это исследовательский проект и цифровой журнал, посвященный переосмыслению поморской и северной идентичности через призму деколониальной мысли.</p>
+                
+                <div class="mission-block">
+                    <h2>Наша миссия</h2>
+                    <p>Мы стремимся создать критическое пространство для осмысления истории и культуры Европейского Севера, свободное от имперских и колониальных нарративов.</p>
+                </div>
+                
+                <h2>Что мы делаем</h2>
+                <p>В рамках проекта «Инакой» мы:</p>
+                <ul>
+                    <li>Публикуем статьи, исследования и эссе о поморской культуре</li>
+                    <li>Разрабатываем деколониальные подходы к изучению истории Севера</li>
+                    <li>Создаем архив альтернативных источников и свидетельств</li>
+                    <li>Организуем дискуссии и публичные мероприятия</li>
+                    <li>Сотрудничаем с исследователями, активистами и сообществами</li>
+                </ul>
+                
+                <h2>Наши ценности</h2>
+                <div class="values-list">
+                    <div class="value-item">
+                        <div class="value-icon">📖</div>
+                        <div class="value-title">Критическое мышление</div>
+                        <p>Анализ истории и культуры через призму деколониальной теории</p>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">🌊</div>
+                        <div class="value-title">Уважение к традициям</div>
+                        <p>Внимательное изучение и сохранение культурного наследия</p>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">🤝</div>
+                        <div class="value-title">Коллаборация</div>
+                        <p>Открытость к сотрудничеству и междисциплинарному диалогу</p>
+                    </div>
+                </div>
+                
+                <h2>Почему «Инакой»?</h2>
+                <p>Название журнала отсылает к поморскому языку и означает «инаковость», «другость». Мы исследуем инаковость северной культуры, которая часто оставалась на периферии большого нарратива.</p>
+                
+                <blockquote>
+                    «Помор — не тот, кто живет у моря, а тот, кто морем живет»
+                </blockquote>
+                
+                <h2>Присоединяйтесь</h2>
+                <p>Мы открыты для сотрудничества с исследователями, авторами, фотографами и всеми, кто разделяет наши ценности. Если у вас есть идеи, материалы или предложения — напишите нам.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Инакой</h3>
+                <p>Цифровой архив и исследовательский проект, посвященный переосмыслению поморской и северной идентичности, в свете деколониальной мысли.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Разделы</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="#articles">Все статьи</a></li>
+                    <li><a href="#gallery">Галерея</a></li>
+                    <li><a href="#archive">Архив</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:inakoj.media@gmail.com">inakoj.media@gmail.com</a></li>
+                    <li><a href="tel:+40 764 506 141">+40 (764) 506-141</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Ресурсы</h3>
+                <ul class="footer-links">
+                    <li><a href="about.html">О проекте</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                    <li><a href="#research">Исследования</a></li>
+                    <li><a href="#subscribe">Подписаться</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Инакой. Поморский журнал о деколониальности. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // МЕНЮ
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            function openMenu() {
+                hamburger.classList.add('active');
+                navLinks.classList.add('active');
+                menuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeMenu() {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (navLinks.classList.contains('active')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+            
+            menuOverlay.addEventListener('click', function() {
+                closeMenu();
+            });
+            
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', function() {
+                    closeMenu();
+                });
+            });
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                    closeMenu();
+                }
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (navLinks.classList.contains('active') && 
+                    !navLinks.contains(e.target) && 
+                    !hamburger.contains(e.target)) {
+                    closeMenu();
+                }
+            });
+        });
+    </script>
+
+    <!-- Netlify Identity -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

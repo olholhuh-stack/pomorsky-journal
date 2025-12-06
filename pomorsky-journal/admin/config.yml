@@ -1,0 +1,65 @@
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: "Создана статья: {{slug}}"
+    update: "Обновлена статья: {{slug}}"
+    delete: "Удалена статья: {{slug}}"
+    uploadMedia: "Загружено изображение: {{path}}"
+    deleteMedia: "Удалено изображение: {{path}}"
+
+# Папка для медиафайлов
+media_folder: "images"
+public_folder: "/images"
+
+# Настройки редактора
+site_url: https://ваш-сайт.netlify.app
+display_url: https://ваш-сайт.netlify.app
+logo_url: "/images/logo.png"
+show_preview_links: true
+
+# Коллекции (статьи)
+collections:
+  - name: "articles"
+    label: "Статьи"
+    folder: "articles"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Название", name: "title", widget: "string"}
+      - {label: "Автор", name: "author", widget: "string", default: "Редакция Инакой"}
+      - {label: "Дата публикации", name: "date", widget: "datetime"}
+      - label: "Категория"
+        name: "category"
+        widget: "select"
+        options: 
+          - {label: "Идентичность", value: "идентичность"}
+          - {label: "История", value: "история"}
+          - {label: "Культура", value: "культура"}
+        default: "история"
+      - {label: "Краткое описание", name: "excerpt", widget: "text"}
+      - {label: "Изображение для предпросмотра", name: "previewImage", widget: "image", required: false}
+      - {label: "Содержание статьи", name: "content", widget: "markdown"}
+      - label: "Теги"
+        name: "tags"
+        widget: "list"
+        default: []
+        required: false
+        field: {label: "Тег", name: "tag", widget: "string"}
+
+  - name: "pages"
+    label: "Страницы"
+    files:
+      - file: "about.md"
+        label: "О проекте"
+        name: "about"
+        fields:
+          - {label: "Название", name: "title", widget: "string"}
+          - {label: "Содержание", name: "body", widget: "markdown"}
+      
+      - file: "contacts.md"
+        label: "Контакты"
+        name: "contacts"
+        fields:
+          - {label: "Название", name: "title", widget: "string"}
+          - {label: "Содержание", name: "body", widget: "markdown"}

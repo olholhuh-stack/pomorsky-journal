@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инакой - Панель для авторов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;350;400;450;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .admin-container {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(139, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(139, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #8B0000;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .title {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        
+        .login-button {
+            background: #8B0000;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            display: inline-block;
+            font-family: 'Courier New', monospace;
+            font-weight: 500;
+        }
+        
+        .login-button:hover {
+            background: #a52a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.2);
+        }
+        
+        .info {
+            margin-top: 30px;
+            color: #777;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .info a {
+            color: #8B0000;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .info a:hover {
+            color: #a52a2a;
+            text-decoration: underline;
+        }
+        
+        .error {
+            color: #c62828;
+            margin-top: 20px;
+            padding: 15px;
+            background: #ffebee;
+            border-radius: 4px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            margin-top: 20px;
+            color: #777;
+            display: none;
+        }
+        
+        .success {
+            color: #388e3c;
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        /* Стили для самой CMS */
+        #nc-root {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            background: white;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container" id="loginContainer">
+        <div class="logo">Инакой</div>
+        <div class="title">Панель для авторов</div>
+        <button class="login-button" id="loginButton">Войти для публикации статей</button>
+        <div class="loading" id="loading">Загрузка панели управления...</div>
+        <div class="success" id="successMessage"></div>
+        <div class="error" id="errorMessage"></div>
+        <div class="info">
+            Для публикации статей требуется доступ от редакции.<br>
+            Если у вас нет доступа, свяжитесь с редакцией через <a href="../contacts.html">форму контактов</a>.
+        </div>
+    </div>
+
+    <div id="nc-root" style="display: none;"></div>
+    
+    <!-- Netlify Identity Widget -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <!-- Netlify CMS -->
+    <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginContainer = document.getElementById('loginContainer');
+            const loginButton = document.getElementById('loginButton');
+            const loading = document.getElementById('loading');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const cmsRoot = document.getElementById('nc-root');
+            
+            // Проверяем, доступен ли Netlify Identity
+            if (window.netlifyIdentity) {
+                // Инициализируем Identity
+                window.netlifyIdentity.init();
+                
+                // Проверяем статус пользователя при загрузке
+                window.netlifyIdentity.on('init', function(user) {
+                    if (user) {
+                        // Пользователь уже вошел - показываем CMS
+                        showCMS();
+                    } else {
+                        // Пользователь не вошел - показываем кнопку входа
+                        loginContainer.style.display = 'block';
+                        loginButton.style.display = 'inline-block';
+                    }
+                });
+                
+                // Обработчик клика по кнопке входа
+                loginButton.addEventListener('click', function() {
+                    window.netlifyIdentity.open();
+                });
+                
+                // Обработчик успешного входа
+                window.netlifyIdentity.on('login', function(user) {
+                    // Скрываем кнопку и показываем загрузку
+                    loginButton.style.display = 'none';
+                    successMessage.textContent = 'Вход выполнен успешно! Загружаем редактор...';
+                    successMessage.style.display = 'block';
+                    loading.style.display = 'block';
+                    
+                    // Ждем 1 секунду и показываем CMS
+                    setTimeout(function() {
+                        showCMS();
+                    }, 1000);
+                });
+                
+                // Обработчик выхода
+                window.netlifyIdentity.on('logout', function() {
+                    // Перезагружаем страницу
+                    window.location.reload();
+                });
+                
+                // Обработчик ошибок
+                window.netlifyIdentity.on('error', function(err) {
+                    errorMessage.textContent = 'Ошибка входа: ' + (err.message || 'Неизвестная ошибка');
+                    errorMessage.style.display = 'block';
+                    loading.style.display = 'none';
+                });
+                
+            } else {
+                errorMessage.textContent = 'Не удалось загрузить систему входа. Пожалуйста, проверьте подключение к интернету и обновите страницу.';
+                errorMessage.style.display = 'block';
+                loginButton.style.display = 'none';
+            }
+            
+            // Функция для отображения CMS
+            function showCMS() {
+                // Скрываем контейнер входа
+                loginContainer.style.display = 'none';
+                loading.style.display = 'none';
+                successMessage.style.display = 'none';
+                
+                // Показываем корневой элемент CMS
+                cmsRoot.style.display = 'block';
+                
+                // Инициализируем CMS
+                if (typeof NetlifyCMS !== 'undefined') {
+                    NetlifyCMS.init();
+                } else {
+                    errorMessage.textContent = 'Не удалось загрузить редактор статей. Пожалуйста, обновите страницу.';
+                    errorMessage.style.display = 'block';
+                    loginContainer.style.display = 'block';
+                    cmsRoot.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
