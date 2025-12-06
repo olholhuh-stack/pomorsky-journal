@@ -617,6 +617,21 @@
             loadArticle();
         });
 
+        // ФУНКЦИЯ ДЛЯ УДАЛЕНИЯ FRONTMATTER (YAML ЗАГОЛОВКА)
+        function removeFrontmatter(markdown) {
+            // Ищем frontmatter в формате --- ... ---
+            const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
+            const match = markdown.match(frontmatterRegex);
+            
+            if (match) {
+                // Удаляем frontmatter и возвращаем остальной текст
+                return markdown.slice(match[0].length);
+            }
+            
+            // Если frontmatter не найден, возвращаем исходный текст
+            return markdown;
+        }
+
         // ЗАГРУЗКА СТАТЬИ
         async function loadArticle() {
             try {
@@ -645,7 +660,12 @@
                 try {
                     const contentResponse = await fetch(article.contentFile);
                     if (contentResponse.ok) {
-                        const markdown = await contentResponse.text();
+                        let markdown = await contentResponse.text();
+                        
+                        // УДАЛЯЕМ FRONTMATTER ПЕРЕД ПРЕОБРАЗОВАНИЕМ
+                        markdown = removeFrontmatter(markdown);
+                        
+                        // Преобразуем Markdown в HTML
                         content = marked.parse(markdown);
                     } else {
                         // Если файл не найден, создаем демо-контент
