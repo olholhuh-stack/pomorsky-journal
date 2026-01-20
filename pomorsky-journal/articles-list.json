@@ -24,5 +24,19 @@
     "previewImage": "images/previews/preview-2.png",
     "contentFile": "articles/finskij-sisu-i-sovetskij-dolg-poeziya-kak-pamyat-o-konflikte-1939-1940.md",
     "tags": ["финляндия", "советский союз", "зимняя война", "поэзия", "литература", "твардовский"]
+  },
+  {
+    "id": 3,
+    "slug": "tihaya-avtonomiya-severa-kak-saamskie-obshchiny-sohranyayut-kulturu-vopreki-obstoyatelstvam",
+    "title": "Тихая автономия Севера",
+    "subtitle": "Как саамские общины сохраняют культуру вопреки обстоятельствам",
+    "excerpt": "Почему в условиях, когда государство воспринимает культурное разнообразие как декоративный элемент, саамские общины помнят, что идентичность не нуждается в разрешении сверху",
+    "author": "Семён Чирман",
+    "date": "2026-12-20",
+    "category": "идентичность",
+    "previewImage": "images/previews/preview-3.png",
+    "contentFile": "articles/tihaya-avtonomiya-severa-kak-saamskie-obshchiny-sohranyayut-kulturu-vopreki-obstoyatelstvam.md",
+    "tags": ["саамы", "россия", "лапландия", "мурманская область", "автономия", "культура"]
   }
 ]
+
