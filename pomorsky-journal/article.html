@@ -983,38 +983,59 @@
         }
     }
     
-    // Обработка сносок в Markdown
-    function processFootnotes(markdown) {
-        // Сначала извлекаем сноски из текста
-        const footnoteRegex = /\[\^(\d+)\]:\s*(.*?)(?=\n\[\^\d+\]:|\n\n|$)/gs;
-        const footnotes = {};
+// Обработка сносок в Markdown - УЛУЧШЕННАЯ ВЕРСИЯ
+function processFootnotes(markdown) {
+    console.log('Начинаем обработку сносок...');
+    
+    // Ищем все сноски в формате [^число]: текст
+    // Исправленное регулярное выражение для лучшего захвата
+    const footnoteRegex = /\[\^(\d+)\]:\s*([\s\S]*?)(?=\n\[\^\d+\]:|\n{2,}|\n[А-Я]|\n*$)/gs;
+    const footnotes = {};
+    
+    // Находим все сноски
+    let match;
+    while ((match = footnoteRegex.exec(markdown)) !== null) {
+        const number = match[1];
+        let text = match[2].trim();
         
-        // Ищем все сноски
-        let match;
-        while ((match = footnoteRegex.exec(markdown)) !== null) {
-            const number = match[1];
-            const text = match[2].trim();
-            footnotes[number] = text;
-            // Удаляем сноску из основного текста
-            markdown = markdown.replace(match[0], '');
-        }
-        
-        // Сохраняем сноски в глобальную переменную
-        const sortedKeys = Object.keys(footnotes).sort((a, b) => parseInt(a) - parseInt(b));
-        currentFootnotes = sortedKeys.map(key => footnotes[key]);
-        
-        // Заменяем ссылки на сноски в тексте
-        const refRegex = /\[\^(\d+)\]/g;
-        markdown = markdown.replace(refRegex, function(match, number) {
-            const index = sortedKeys.indexOf(number);
-            if (index !== -1) {
-                return `<button class="footnote-ref" data-footnote-index="${index}">${number}</button>`;
-            }
-            return match;
-        });
-        
-        return markdown;
+        // Очищаем текст сноски
+        text = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+        footnotes[number] = text;
+        console.log(`Найдена сноска [^${number}]: ${text.substring(0, 50)}...`);
     }
+    
+    console.log(`Всего найдено сносок: ${Object.keys(footnotes).length}`);
+    
+    // Удаляем блок сносок из текста
+    // Ищем от первой сноски до конца или до русского заглавного символа
+    const footnoteBlockStart = markdown.indexOf('[^1]:');
+    if (footnoteBlockStart !== -1) {
+        const remainingText = markdown.substring(footnoteBlockStart);
+        const blockEnd = remainingText.search(/\n\n\s*[А-Я]|\n[А-Я][а-я]|\n*$/);
+        
+        if (blockEnd !== -1) {
+            const footnoteBlock = markdown.substring(footnoteBlockStart, footnoteBlockStart + blockEnd);
+            markdown = markdown.replace(footnoteBlock, '').trim();
+        }
+    }
+    
+    // Сохраняем сноски в глобальную переменную
+    const sortedKeys = Object.keys(footnotes).sort((a, b) => parseInt(a) - parseInt(b));
+    currentFootnotes = sortedKeys.map(key => footnotes[key]);
+    
+    // Заменяем ссылки на сноски в тексте
+    const refRegex = /\[\^(\d+)\]/g;
+    markdown = markdown.replace(refRegex, function(match, number) {
+        const index = parseInt(number) - 1;
+        if (index >= 0 && index < currentFootnotes.length) {
+            return `<button class="footnote-ref" data-footnote-index="${index}">${number}</button>`;
+        }
+        console.warn(`Ссылка на сноску ${number} не обработана`);
+        return match;
+    });
+    
+    return markdown;
+}
 
     // ФУНКЦИЯ ОБНОВЛЕНИЯ МЕТА-ТЕГОВ
     function updateMetaTags(article) {
@@ -1212,3 +1233,4 @@
     }
 </script>
 </body> </html>
+
