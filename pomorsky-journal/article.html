@@ -307,33 +307,42 @@
         font-size: 0.8rem;
     }
 
-    /* СТИЛИ ДЛЯ СНОСОК */
+    /* СТИЛИ ДЛЯ СНОСОК - ИСПРАВЛЕННЫЕ И УЛУЧШЕННЫЕ */
     .footnote-ref {
         background: none;
         border: none;
         color: var(--color-accent);
-        font-size: 0.85em;
+        font-size: 0.8em;
         vertical-align: super;
-        line-height: 1;
-        padding: 0 2px;
+        line-height: 0;
+        padding: 0 1px;
         cursor: pointer;
         font-family: inherit;
         text-decoration: none;
         position: relative;
-        z-index: 1;
-        font-weight: 500;
+        top: -0.5em;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        border-radius: 2px;
     }
 
     .footnote-ref:hover {
-        text-decoration: underline;
         color: var(--color-accent-light);
+        text-decoration: underline;
+        background-color: rgba(139, 0, 0, 0.05);
     }
 
+    .footnote-ref:focus {
+        outline: 2px solid rgba(139, 0, 0, 0.3);
+        outline-offset: 1px;
+    }
+
+    /* ВСПЛЫВАЮЩЕЕ ОКНО ДЛЯ СНОСОК */
     .footnote-popover {
         position: absolute;
-        z-index: 1000;
-        max-width: 320px;
-        width: max-content;
+        z-index: 2000;
+        width: 320px;
+        max-width: 90vw;
         background: var(--color-white);
         border: 1px solid var(--color-border);
         border-radius: 8px;
@@ -343,14 +352,14 @@
         line-height: 1.5;
         color: var(--color-gray);
         opacity: 0;
-        transform: scale(0.95);
+        transform: translateY(10px) scale(0.98);
         transition: opacity 0.2s ease, transform 0.2s ease;
         pointer-events: none;
     }
 
     .footnote-popover.active {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
         pointer-events: auto;
     }
 
@@ -367,6 +376,26 @@
         transform: rotate(45deg);
     }
 
+    .footnote-popover .footnote-content {
+        max-height: 200px;
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+
+    .footnote-popover .footnote-content::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .footnote-popover .footnote-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 2px;
+    }
+
+    .footnote-popover .footnote-content::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 2px;
+    }
+
     /* Оверлей для сносок */
     .footnote-overlay {
         position: fixed;
@@ -374,7 +403,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 999;
+        z-index: 1999;
         background: transparent;
         display: none;
     }
@@ -587,7 +616,7 @@
         }
         
         .footnote-popover {
-            max-width: 280px;
+            width: 280px;
             padding: 15px;
             font-size: 0.9rem;
         }
@@ -620,9 +649,20 @@
         }
         
         .footnote-popover {
-            max-width: 250px;
+            width: 250px;
             padding: 12px;
             font-size: 0.85rem;
+            left: 50% !important;
+            transform: translateX(-50%) translateY(10px) scale(0.98);
+        }
+        
+        .footnote-popover.active {
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+        
+        .footnote-popover::before {
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
         }
     }
 </style>
@@ -750,31 +790,102 @@
         loadArticle();
     });
 
-    // ФУНКЦИЯ ДЛЯ УДАЛЕНИЯ FRONTMATTER (YAML ЗАГОЛОВКА)
-    function removeFrontmatter(markdown) {
-        // Ищем frontmatter в формате --- ... ---
-        const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
-        const match = markdown.match(frontmatterRegex);
-        
-        if (match) {
-            // Удаляем frontmatter и возвращаем остальной текст
-            return markdown.slice(match[0].length);
-        }
-        
-        // Если frontmatter не найден, возвращаем исходный текст
-        return markdown;
-    }
-
     // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СНОСОК
     let currentFootnotes = [];
     let activePopover = null;
     let activeOverlay = null;
 
+    // ФУНКЦИЯ ДЛЯ УДАЛЕНИЯ FRONTMATTER (YAML ЗАГОЛОВКА)
+    function removeFrontmatter(markdown) {
+        const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
+        const match = markdown.match(frontmatterRegex);
+        
+        if (match) {
+            return markdown.slice(match[0].length);
+        }
+        
+        return markdown;
+    }
+
+    // ОБРАБОТКА СНОСОК - ИСПРАВЛЕННАЯ ВЕРСИЯ
+    function processFootnotes(markdown) {
+        console.log('Начинаем обработку сносок...');
+        
+        // Извлекаем все сноски из текста
+        const footnoteRegex = /\[\^(\d+)\]:\s*([\s\S]*?)(?=\n\[\^\d+\]:|\n\n|$)/g;
+        const footnotes = {};
+        
+        // Находим все сноски
+        let match;
+        let lastIndex = 0;
+        const matches = [];
+        
+        while ((match = footnoteRegex.exec(markdown)) !== null) {
+            const number = match[1];
+            let text = match[2].trim();
+            
+            // Убираем лишние переносы строк внутри сноски
+            text = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+            footnotes[number] = text;
+            matches.push(match);
+            lastIndex = match.index;
+        }
+        
+        console.log(`Найдено сносок: ${Object.keys(footnotes).length}`, footnotes);
+        
+        // Удаляем блок сносок из основного текста
+        // Ищем от первой сноски до конца файла или до следующего заголовка
+        if (matches.length > 0) {
+            const firstMatch = matches[0];
+            const footnoteBlockStart = firstMatch.index;
+            
+            // Ищем конец блока сносок (два переноса строки или конец файла)
+            const remainingText = markdown.substring(footnoteBlockStart);
+            const endOfFootnotes = remainingText.search(/\n\n\s*\n|\n##|\nИсточники|\n*$/);
+            
+            if (endOfFootnotes !== -1) {
+                const footnoteBlock = markdown.substring(footnoteBlockStart, footnoteBlockStart + endOfFootnotes);
+                markdown = markdown.replace(footnoteBlock, '').trim();
+            } else {
+                // Если не нашли конец, удаляем от начала сносок до конца
+                markdown = markdown.substring(0, footnoteBlockStart).trim();
+            }
+        }
+        
+        // Сохраняем сноски в глобальную переменную
+        const sortedKeys = Object.keys(footnotes).sort((a, b) => parseInt(a) - parseInt(b));
+        currentFootnotes = sortedKeys.map(key => footnotes[key]);
+        
+        console.log('Сноски сохранены:', currentFootnotes);
+        
+        // Заменяем ссылки на сноски в тексте на кнопки
+        const refRegex = /\[\^(\d+)\]/g;
+        markdown = markdown.replace(refRegex, function(match, number) {
+            const index = parseInt(number) - 1;
+            if (index >= 0 && index < currentFootnotes.length) {
+                return `<button class="footnote-ref" data-footnote-index="${index}" aria-label="Сноска ${number}">${number}</button>`;
+            }
+            return match;
+        });
+        
+        return markdown.trim();
+    }
+
     // ФУНКЦИИ ДЛЯ РАБОТЫ СО СНОСКАМИ
     function initFootnotes() {
+        console.log('Инициализируем сноски...');
+        
         const footnoteRefs = document.querySelectorAll('.footnote-ref');
         
         footnoteRefs.forEach(ref => {
+            // Удаляем старые обработчики, если есть
+            ref.replaceWith(ref.cloneNode(true));
+        });
+        
+        // Получаем новые ссылки после клонирования
+        const newFootnoteRefs = document.querySelectorAll('.footnote-ref');
+        
+        newFootnoteRefs.forEach(ref => {
             ref.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -782,7 +893,12 @@
                 const index = parseInt(this.getAttribute('data-footnote-index'));
                 const footnoteText = currentFootnotes[index];
                 
-                if (!footnoteText) return;
+                if (!footnoteText) {
+                    console.error(`Сноска с индексом ${index} не найдена`);
+                    return;
+                }
+                
+                console.log(`Показываем сноску ${index + 1}:`, footnoteText);
                 
                 // Закрываем предыдущую сноску, если она открыта
                 closeActiveFootnote();
@@ -790,12 +906,21 @@
                 // Создаем оверлей
                 activeOverlay = document.createElement('div');
                 activeOverlay.className = 'footnote-overlay active';
+                activeOverlay.setAttribute('role', 'button');
+                activeOverlay.setAttribute('aria-label', 'Закрыть сноску');
+                activeOverlay.tabIndex = 0;
                 document.body.appendChild(activeOverlay);
                 
                 // Создаем попап
                 activePopover = document.createElement('div');
                 activePopover.className = 'footnote-popover active';
-                activePopover.innerHTML = marked.parse(footnoteText); // Парсим markdown в сноске
+                activePopover.setAttribute('role', 'dialog');
+                activePopover.setAttribute('aria-label', `Сноска ${index + 1}`);
+                activePopover.innerHTML = `
+                    <div class="footnote-content">
+                        ${marked.parse(footnoteText)}
+                    </div>
+                `;
                 
                 // Позиционируем попап
                 const rect = this.getBoundingClientRect();
@@ -806,29 +931,45 @@
                 let left = rect.left + scrollLeft;
                 
                 // Корректируем позицию для мобильных устройств
-                if (window.innerWidth < 768) {
-                    left = Math.max(10, left - 140);
-                    if (top + activePopover.offsetHeight > window.innerHeight + scrollTop) {
+                if (window.innerWidth < 480) {
+                    left = window.innerWidth / 2;
+                    activePopover.style.left = `${left}px`;
+                    activePopover.style.top = `${top}px`;
+                } else {
+                    // Проверяем, не выходит ли попап за правый край экрана
+                    if (left + 320 > window.innerWidth) {
+                        left = window.innerWidth - 340;
+                    }
+                    
+                    // Проверяем, не выходит ли попап за верхний край экрана
+                    if (top - scrollTop + activePopover.offsetHeight > window.innerHeight) {
                         top = rect.top + scrollTop - activePopover.offsetHeight - 10;
                     }
+                    
+                    activePopover.style.top = `${top}px`;
+                    activePopover.style.left = `${left}px`;
                 }
-                
-                // Проверяем, не выходит ли попап за границы экрана
-                if (left + activePopover.offsetWidth > window.innerWidth) {
-                    left = window.innerWidth - activePopover.offsetWidth - 10;
-                }
-                
-                activePopover.style.top = top + 'px';
-                activePopover.style.left = left + 'px';
                 
                 document.body.appendChild(activePopover);
                 
+                // Фокусируемся на оверлее для доступности
+                activeOverlay.focus();
+                
                 // Обработчики для закрытия
-                activeOverlay.addEventListener('click', closeActiveFootnote);
+                const closeHandler = function() {
+                    closeActiveFootnote();
+                };
+                
+                activeOverlay.addEventListener('click', closeHandler);
+                activeOverlay.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
+                        closeHandler();
+                    }
+                });
                 
                 const escHandler = function(e) {
                     if (e.key === 'Escape') {
-                        closeActiveFootnote();
+                        closeHandler();
                     }
                 };
                 
@@ -836,66 +977,46 @@
                 
                 // Закрываем при скролле
                 const scrollHandler = function() {
-                    closeActiveFootnote();
+                    closeHandler();
                 };
                 
                 window.addEventListener('scroll', scrollHandler, { once: true });
                 
                 // Сохраняем ссылки на обработчики для удаления
-                activeOverlay.escHandler = escHandler;
-                activeOverlay.scrollHandler = scrollHandler;
+                activeOverlay._closeHandler = closeHandler;
+                activeOverlay._escHandler = escHandler;
+                activeOverlay._scrollHandler = scrollHandler;
+                
+                // Предотвращаем закрытие при клике внутри попапа
+                activePopover.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
             });
         });
+        
+        console.log(`Инициализировано ${newFootnoteRefs.length} сносок`);
     }
     
     function closeActiveFootnote() {
         if (activePopover) {
+            // Удаляем обработчики
+            if (activeOverlay && activeOverlay._escHandler) {
+                document.removeEventListener('keydown', activeOverlay._escHandler);
+            }
+            if (activeOverlay && activeOverlay._scrollHandler) {
+                window.removeEventListener('scroll', activeOverlay._scrollHandler);
+            }
+            
             activePopover.remove();
             activePopover = null;
         }
         if (activeOverlay) {
-            if (activeOverlay.escHandler) {
-                document.removeEventListener('keydown', activeOverlay.escHandler);
-            }
-            if (activeOverlay.scrollHandler) {
-                window.removeEventListener('scroll', activeOverlay.scrollHandler);
+            if (activeOverlay._closeHandler) {
+                activeOverlay.removeEventListener('click', activeOverlay._closeHandler);
             }
             activeOverlay.remove();
             activeOverlay = null;
         }
-    }
-    
-    // Обработка сносок в Markdown
-    function processFootnotes(markdown) {
-        // Сначала извлекаем сноски из текста
-        const footnoteRegex = /\[\^(\d+)\]:\s*(.*?)(?=\n\[\^\d+\]:|\n\n|$)/gs;
-        const footnotes = {};
-        
-        // Ищем все сноски
-        let match;
-        while ((match = footnoteRegex.exec(markdown)) !== null) {
-            const number = match[1];
-            const text = match[2].trim();
-            footnotes[number] = text;
-            // Удаляем сноску из основного текста
-            markdown = markdown.replace(match[0], '');
-        }
-        
-        // Сохраняем сноски в глобальную переменную
-        const sortedKeys = Object.keys(footnotes).sort((a, b) => parseInt(a) - parseInt(b));
-        currentFootnotes = sortedKeys.map(key => footnotes[key]);
-        
-        // Заменяем ссылки на сноски в тексте
-        const refRegex = /\[\^(\d+)\]/g;
-        markdown = markdown.replace(refRegex, function(match, number) {
-            const index = sortedKeys.indexOf(number);
-            if (index !== -1) {
-                return `<button class="footnote-ref" data-footnote-index="${index}">${number}</button>`;
-            }
-            return match;
-        });
-        
-        return markdown;
     }
 
     // ЗАГРУЗКА СТАТЬИ
