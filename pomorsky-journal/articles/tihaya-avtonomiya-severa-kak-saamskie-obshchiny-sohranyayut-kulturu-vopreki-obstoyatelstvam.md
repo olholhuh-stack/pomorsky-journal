@@ -29,6 +29,8 @@
 [^2]: Это перекликается с теорией М. де Серто о тактиках и стратегиях.
 
 
+
+
 Источники
 
 IWGIA. The Indigenous World 2025: Russia. International Work Group for Indigenous Affairs, 2025.
@@ -57,6 +59,7 @@ https://saami-tulom.orgs.biz
 
 OHCHR. Indigenous Peoples’ Rights in the Russian Federation. United Nations Human Rights Office.
 https://www.ohchr.org
+
 
 
 
