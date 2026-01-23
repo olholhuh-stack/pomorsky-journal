@@ -17,373 +17,562 @@
             --color-accent-light: #a52a2a;
             --color-accent-bg: #fff8f8;
         }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-   <nav class="main-nav">
-    <div class="nav-container">
-        <a href="index.html" class="nav-logo">Инакой</a>
-        <button class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Главная</a></li>
-            <li><a href="about.html">О проекте</a></li>
-            <li><a href="contacts.html">Контакты</a></li>
-            <li><a href="admin/index.html" class="admin-link">Авторам</a></li>
-        </ul>
-    </div>
-</nav>
+    body {
+        font-family: 'Courier New', monospace;
+        line-height: 1.6;
+        color: var(--color-black);
+        background-color: var(--color-white);
+        font-size: 16px;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+    }
 
-<div class="app">
-    <a href="index.html" class="back-button">← Назад к статьям</a>
-    
-    <div class="article-container" id="articleContainer">
-        <div class="skeleton skeleton-title"></div>
-        <div class="skeleton skeleton-meta"></div>
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-text short"></div>
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-text short"></div>
-    </div>
-</div>
+    .app {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 40px;
+        width: 100%;
+    }
 
-<footer class="footer">
-    <div class="footer-content">
-        <div class="footer-section">
-            <h3>Инакой</h3>
-            <p>Цифровой архив и исследовательский проект, посвященный переосмыслению поморской и северной идентичности, в свете деколониальной мысли.</p>
-        </div>
-        <div class="footer-section">
-            <h3>Разделы</h3>
-            <ul class="footer-links">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="#articles">Все статьи</a></li>
-                <li><a href="#gallery">Галерея</a></li>
-                <li><a href="#archive">Архив</a></li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <h3>Контакты</h3>
-            <ul class="footer-links">
-                <li><a href="mailto:inakoj.media@gmail.com">inakoj.media@gmail.com</a></li>
-                <li><a href="tel:+40 764 506 141">+40 (764) 506-141</a></li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <h3>Ресурсы</h3>
-            <ul class="footer-links">
-                <li><a href="about.html">О проекте</a></li>
-                <li><a href="contacts.html">Контакты</a></li>
-                <li><a href="#research">Исследования</a></li>
-                <li><a href="#subscribe">Подписаться</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>© 2024 Инакой. Поморский журнал о деколониальности. Все права защищены.</p>
-    </div>
-</footer>
+    /* НАВИГАЦИЯ */
+    .main-nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: var(--color-white);
+        border-bottom: 1px solid var(--color-border);
+        z-index: 1000;
+        padding: 20px 0;
+    }
 
-<!-- Подключаем библиотеку для преобразования Markdown в HTML -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-<script>
-    // МЕНЮ
-    document.addEventListener('DOMContentLoaded', function() {
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        const menuOverlay = document.getElementById('menuOverlay');
-        
-        function openMenu() {
-            hamburger.classList.add('active');
-            navLinks.classList.add('active');
-            menuOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+    .nav-logo {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: var(--color-accent);
+        text-decoration: none;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+
+    /* ГАМБУРГЕР */
+    .hamburger {
+        display: none;
+        width: 30px;
+        height: 20px;
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .hamburger span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: var(--color-accent);
+        position: absolute;
+        left: 0;
+        transition: all 0.3s ease;
+    }
+
+    .hamburger span:nth-child(1) { top: 0; }
+    .hamburger span:nth-child(2) { top: 9px; }
+    .hamburger span:nth-child(3) { top: 18px; }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg);
+        top: 9px;
+    }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg);
+        top: 9px;
+    }
+
+    /* МЕНЮ */
+    .nav-links {
+        display: flex;
+        gap: 40px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links a {
+        color: var(--color-black);
+        text-decoration: none;
+        font-weight: 400;
+        font-size: 0.95rem;
+        padding: 5px 0;
+        position: relative;
+        transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        color: var(--color-accent);
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--color-accent);
+        transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .admin-link {
+        background-color: var(--color-accent);
+        color: var(--color-white) !important;
+        padding: 8px 20px !important;
+        border: 1px solid var(--color-accent);
+        transition: all 0.3s ease;
+    }
+
+    .admin-link:hover {
+        background-color: var(--color-white);
+        color: var(--color-accent) !important;
+    }
+
+    /* МОБИЛЬНОЕ МЕНЮ */
+    @media (max-width: 768px) {
+        .app, .nav-container {
+            padding: 0 20px;
         }
         
-        function closeMenu() {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-            menuOverlay.classList.remove('active');
-            document.body.style.overflow = '';
+        .hamburger { display: block; }
+        
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: var(--color-white);
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 0;
+            transition: right 0.4s ease;
+            z-index: 1001;
+            padding-top: 80px;
+            border-left: 1px solid var(--color-border);
         }
         
-        hamburger.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (navLinks.classList.contains('active')) {
-                closeMenu();
-            } else {
-                openMenu();
-            }
-        });
+        .nav-links.active { right: 0; }
         
-        menuOverlay.addEventListener('click', function() {
-            closeMenu();
-        });
-        
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                closeMenu();
-            });
-        });
-        
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
-                closeMenu();
-            }
-        });
-        
-        document.addEventListener('click', function(e) {
-            if (navLinks.classList.contains('active') && 
-                !navLinks.contains(e.target) && 
-                !hamburger.contains(e.target)) {
-                closeMenu();
-            }
-        });
-        
-        // Загружаем статью при загрузке страницы
-        loadArticle();
-    });
-
-    // ФУНКЦИЯ ДЛЯ УДАЛЕНИЯ FRONTMATTER (YAML ЗАГОЛОВКА)
-    function removeFrontmatter(markdown) {
-        // Ищем frontmatter в формате --- ... ---
-        const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
-        const match = markdown.match(frontmatterRegex);
-        
-        if (match) {
-            // Удаляем frontmatter и возвращаем остальной текст
-            return markdown.slice(match[0].length);
+        .nav-links a {
+            width: 100%;
+            padding: 15px 30px;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 1.1rem;
         }
         
-        // Если frontmatter не найден, возвращаем исходный текст
-        return markdown;
-    }
-
-    // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СНОСОК
-    let currentFootnotes = [];
-    let activePopover = null;
-    let activeOverlay = null;
-
-    // ФУНКЦИИ ДЛЯ РАБОТЫ СО СНОСКАМИ
-    function initFootnotes() {
-        const footnoteRefs = document.querySelectorAll('.footnote-ref');
-        
-        footnoteRefs.forEach(ref => {
-            ref.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const index = parseInt(this.getAttribute('data-footnote-index'));
-                const footnoteText = currentFootnotes[index];
-                
-                if (!footnoteText) return;
-                
-                // Закрываем предыдущую сноску, если она открыта
-                closeActiveFootnote();
-                
-                // Создаем оверлей
-                activeOverlay = document.createElement('div');
-                activeOverlay.className = 'footnote-overlay active';
-                document.body.appendChild(activeOverlay);
-                
-                // Создаем попап
-                activePopover = document.createElement('div');
-                activePopover.className = 'footnote-popover active';
-                activePopover.innerHTML = footnoteText;
-                
-                // Позиционируем попап
-                const rect = this.getBoundingClientRect();
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                
-                let top = rect.bottom + scrollTop;
-                let left = rect.left + scrollLeft;
-                
-                // Корректируем позицию для мобильных устройств
-                if (window.innerWidth < 768) {
-                    left = Math.max(10, left - 140);
-                }
-                
-                activePopover.style.top = top + 'px';
-                activePopover.style.left = left + 'px';
-                
-                document.body.appendChild(activePopover);
-                
-                // Обработчики для закрытия
-                activeOverlay.addEventListener('click', closeActiveFootnote);
-                
-                document.addEventListener('keydown', function escHandler(e) {
-                    if (e.key === 'Escape') {
-                        closeActiveFootnote();
-                    }
-                });
-                
-                // Закрываем при скролле
-                window.addEventListener('scroll', closeActiveFootnote, { once: true });
-            });
-        });
-    }
-    
-    function closeActiveFootnote() {
-        if (activePopover) {
-            activePopover.remove();
-            activePopover = null;
-        }
-        if (activeOverlay) {
-            activeOverlay.remove();
-            activeOverlay = null;
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
         }
         
-        // Удаляем обработчики
-        document.removeEventListener('keydown', closeActiveFootnote);
-        window.removeEventListener('scroll', closeActiveFootnote);
+        .menu-overlay.active { display: block; }
     }
-    
-    // Обработка сносок в Markdown
-    function processFootnotes(markdown) {
-        // Сначала извлекаем сноски из текста
-        const footnoteRegex = /\[\^(\d+)\]:\s*(.*?)(?=\n\[\^\d+\]:|\n\n|$)/gs;
-        const footnotes = {};
-        
-        // Ищем все сноски
-        let match;
-        while ((match = footnoteRegex.exec(markdown)) !== null) {
-            const number = match[1];
-            const text = match[2].trim();
-            footnotes[number] = text;
-            // Удаляем сноску из основного текста
-            markdown = markdown.replace(match[0], '');
+
+    /* КНОПКА НАЗАД */
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 120px 0 30px 0;
+        color: var(--color-accent);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 12px 24px;
+        border: 2px solid var(--color-accent);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        background: transparent;
+    }
+
+    .back-button:hover {
+        background-color: var(--color-accent);
+        color: var(--color-white);
+        transform: translateX(-5px);
+    }
+
+    /* СТАТЬЯ */
+    .article-container {
+        margin-bottom: 80px;
+    }
+
+    .article-header {
+        margin-bottom: 50px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .article-category {
+        display: inline-block;
+        background: transparent;
+        color: var(--color-accent);
+        padding: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 20px;
+    }
+
+    .article-category::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 12px;
+        height: 2px;
+        background: var(--color-accent);
+        transform: translateY(-50%);
+    }
+
+    .article-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        color: var(--color-black);
+        margin-bottom: 20px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+    }
+
+    .article-meta {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 0.95rem;
+        color: var(--color-gray);
+        font-weight: 400;
+    }
+
+    .article-date {
+        position: relative;
+        padding-left: 25px;
+    }
+
+    .article-date::before {
+        content: '📅';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.8rem;
+    }
+
+    /* СТИЛИ ДЛЯ СНОСОК */
+    .footnote-ref {
+        background: none;
+        border: none;
+        color: var(--color-accent);
+        font-size: 0.85em;
+        vertical-align: super;
+        line-height: 1;
+        padding: 0 2px;
+        cursor: pointer;
+        font-family: inherit;
+        text-decoration: none;
+        position: relative;
+        z-index: 1;
+        font-weight: 500;
+    }
+
+    .footnote-ref:hover {
+        text-decoration: underline;
+        color: var(--color-accent-light);
+    }
+
+    .footnote-popover {
+        position: absolute;
+        z-index: 1000;
+        max-width: 320px;
+        width: max-content;
+        background: var(--color-white);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: var(--color-gray);
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        pointer-events: none;
+    }
+
+    .footnote-popover.active {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+    }
+
+    .footnote-popover::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 20px;
+        width: 10px;
+        height: 10px;
+        background: var(--color-white);
+        border-left: 1px solid var(--color-border);
+        border-top: 1px solid var(--color-border);
+        transform: rotate(45deg);
+    }
+
+    /* Оверлей для сносок (чтобы можно было закрыть, кликнув вне сноски) */
+    .footnote-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        background: transparent;
+        display: none;
+    }
+
+    .footnote-overlay.active {
+        display: block;
+    }
+
+    /* СОДЕРЖАНИЕ СТАТЬИ */
+    .article-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--color-black);
+    }
+
+    .article-content h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: var(--color-accent);
+        margin: 50px 0 20px 0;
+        font-weight: 600;
+    }
+
+    .article-content h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        color: var(--color-black);
+        margin: 40px 0 15px 0;
+        font-weight: 600;
+    }
+
+    .article-content p {
+        margin-bottom: 25px;
+    }
+
+    .article-content blockquote {
+        border-left: 4px solid var(--color-accent);
+        padding-left: 25px;
+        margin: 30px 0;
+        font-style: italic;
+        color: var(--color-gray);
+        font-size: 1.2rem;
+        line-height: 1.6;
+    }
+
+    .article-content img {
+        max-width: 100%;
+        height: auto;
+        margin: 30px 0;
+        border-radius: 4px;
+    }
+
+    /* СКЕЛЕТОН */
+    .skeleton {
+        animation: skeleton-loading 1.5s ease-in-out infinite;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        border-radius: 4px;
+    }
+
+    @keyframes skeleton-loading {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
+
+    .skeleton-title {
+        height: 60px;
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .skeleton-meta {
+        height: 20px;
+        width: 60%;
+        margin-bottom: 30px;
+    }
+
+    .skeleton-text {
+        height: 20px;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .skeleton-text.short {
+        width: 70%;
+    }
+
+    /* ФУТЕР */
+    .footer {
+        background-color: var(--color-gray-light);
+        padding: 80px 0 40px;
+        margin-top: 60px;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 50px;
+    }
+
+    .footer-section h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        color: var(--color-accent);
+        font-weight: 600;
+    }
+
+    .footer-section p {
+        line-height: 1.6;
+        font-size: 0.95rem;
+        color: var(--color-gray);
+        font-weight: 400;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 12px;
+    }
+
+    .footer-links a {
+        color: var(--color-gray);
+        text-decoration: none;
+        transition: color 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+    }
+
+    .footer-links a:hover {
+        color: var(--color-accent);
+    }
+
+    .footer-bottom {
+        max-width: 1200px;
+        margin: 60px auto 0;
+        padding: 30px 40px 0;
+        border-top: 1px solid var(--color-border);
+        text-align: center;
+        color: var(--color-gray);
+        font-size: 0.9rem;
+    }
+
+    /* АДАПТИВНОСТЬ */
+    @media (max-width: 768px) {
+        .app {
+            max-width: 100%;
         }
         
-        // Сохраняем сноски в глобальную переменную
-        currentFootnotes = Object.values(footnotes);
+        .article-title {
+            font-size: 2.2rem;
+        }
         
-        // Заменяем ссылки на сноски в тексте
-        const refRegex = /\[\^(\d+)\]/g;
-        markdown = markdown.replace(refRegex, function(match, number) {
-            const index = parseInt(number) - 1;
-            return `<button class="footnote-ref" data-footnote-index="${index}">${number}</button>`;
-        });
+        .article-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
         
-        return markdown;
-    }
-
-    // ЗАГРУЗКА СТАТЬИ
-    async function loadArticle() {
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            const articleId = urlParams.get('id');
-            
-            if (!articleId) {
-                document.getElementById('articleContainer').innerHTML = 
-                    '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Статья не найдена</div>';
-                return;
-            }
-
-            // Загружаем список статей
-            const response = await fetch('articles-list.json');
-            const articles = await response.json();
-            const article = articles.find(a => a.id == articleId);
-            
-            if (!article) {
-                document.getElementById('articleContainer').innerHTML = 
-                    '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Статья не найдена</div>';
-                return;
-            }
-
-            // Загружаем содержимое статьи
-            let content = '';
-            try {
-                const contentResponse = await fetch(article.contentFile);
-                if (contentResponse.ok) {
-                    let markdown = await contentResponse.text();
-                    
-                    // УДАЛЯЕМ FRONTMATTER ПЕРЕД ПРЕОБРАЗОВАНИЕМ
-                    markdown = removeFrontmatter(markdown);
-                    
-                    // Обрабатываем сноски
-                    markdown = processFootnotes(markdown);
-                    
-                    // Преобразуем Markdown в HTML
-                    content = marked.parse(markdown);
-                } else {
-                    // Если файл не найден, создаем демо-контент
-                    content = createDemoContent(article);
-                }
-            } catch (error) {
-                console.error('Ошибка загрузки содержимого статьи:', error);
-                content = createDemoContent(article);
-            }
-
-            displayArticle(article, content);
-            
-        } catch (error) {
-            console.error('Ошибка загрузки статьи:', error);
-            document.getElementById('articleContainer').innerHTML = 
-                '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Ошибка загрузки статьи. Пожалуйста, попробуйте позже.</div>';
+        .footnote-popover {
+            max-width: 280px;
+            padding: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .footer-content {
+            grid-template-columns: 1fr;
+            gap: 40px;
         }
     }
-    
-    function createDemoContent(article) {
-        return `
-            <p>Это демонстрационное содержание для статьи "${article.title}".</p>
-            <p>В реальной системе здесь будет загружен Markdown файл из папки articles.</p>
-            <h2>О статье</h2>
-            <p>Автор: ${article.author}</p>
-            <p>Дата публикации: ${new Date(article.date).toLocaleDateString('ru-RU')}</p>
-            <p>Категория: ${article.category}</p>
-            ${article.tags ? `<p>Теги: ${article.tags.join(', ')}</p>` : ''}
-            <h2>Краткое содержание</h2>
-            <p>${article.excerpt}</p>
-            <h2>Основной текст</h2>
-            <p>Основной текст статьи будет загружен из соответствующего Markdown файла.</p>
-            <blockquote>Это пример цитаты из статьи, оформленной в стиле журнала.</blockquote>
-            <p>Статья завершается выводами и заключением по теме исследования.</p>
-        `;
-    }
-    
-    function displayArticle(article, content) {
-        const container = document.getElementById('articleContainer');
-        
-        // Обновляем заголовок страницы
-        document.title = `${article.title} - Инакой`;
-        
-        container.innerHTML = `
-            <div class="article-header">
-                <div class="article-category">${article.category}</div>
-                <h1 class="article-title">${article.title}</h1>
-                <div class="article-meta">
-                    <span class="article-author">${article.author}</span>
-                    <span class="article-date">${new Date(article.date).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                </div>
-            </div>
-            <div class="article-content">
-                ${content}
-            </div>
-        `;
-        
-        // Инициализируем сноски после загрузки статьи
-        setTimeout(() => {
-            initFootnotes();
-        }, 100);
-    }
-</script>
 
-<!-- Netlify Identity -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-    if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-            if (!user) {
-                window.netlifyIdentity.on("login", () => {
-                    document.location.href = "/admin/";
-                });
-            }
-        });
+    @media (max-width: 480px) {
+        .app {
+            padding: 0 20px;
+        }
+        
+        .article-title {
+            font-size: 1.8rem;
+        }
+        
+        .article-content {
+            font-size: 1rem;
+        }
+        
+        .back-button {
+            margin-top: 100px;
+        }
+        
+        .footnote-popover {
+            max-width: 250px;
+            padding: 12px;
+            font-size: 0.85rem;
+        }
     }
-</script>
+</style>
 </body> </html>
+
 
 
