@@ -24,13 +24,14 @@
     }
 
     body {
-        font-family: 'Courier New', monospace;
+        font-family: 'Inter', sans-serif;
         line-height: 1.6;
         color: var(--color-black);
         background-color: var(--color-white);
         font-size: 16px;
         font-weight: 400;
         letter-spacing: 0.01em;
+        overflow-x: hidden;
     }
 
     .app {
@@ -38,6 +39,7 @@
         margin: 0 auto;
         padding: 0 40px;
         width: 100%;
+        min-height: 100vh;
     }
 
     /* НАВИГАЦИЯ */
@@ -149,6 +151,7 @@
         color: var(--color-white) !important;
         padding: 8px 20px !important;
         border: 1px solid var(--color-accent);
+        border-radius: 4px;
         transition: all 0.3s ease;
     }
 
@@ -163,7 +166,10 @@
             padding: 0 20px;
         }
         
-        .hamburger { display: block; }
+        .hamburger { 
+            display: block; 
+            z-index: 1002;
+        }
         
         .nav-links {
             position: fixed;
@@ -189,6 +195,10 @@
             padding: 15px 30px;
             border-bottom: 1px solid var(--color-border);
             font-size: 1.1rem;
+        }
+        
+        .nav-links a::after {
+            display: none;
         }
         
         .menu-overlay {
@@ -219,6 +229,7 @@
         border-radius: 4px;
         transition: all 0.3s ease;
         background: transparent;
+        cursor: pointer;
     }
 
     .back-button:hover {
@@ -356,7 +367,7 @@
         transform: rotate(45deg);
     }
 
-    /* Оверлей для сносок (чтобы можно было закрыть, кликнув вне сноски) */
+    /* Оверлей для сносок */
     .footnote-overlay {
         position: fixed;
         top: 0;
@@ -407,6 +418,9 @@
         color: var(--color-gray);
         font-size: 1.2rem;
         line-height: 1.6;
+        background-color: var(--color-accent-bg);
+        padding: 20px;
+        border-radius: 0 4px 4px 0;
     }
 
     .article-content img {
@@ -414,6 +428,35 @@
         height: auto;
         margin: 30px 0;
         border-radius: 4px;
+        display: block;
+    }
+
+    .article-content ul, .article-content ol {
+        margin-bottom: 25px;
+        padding-left: 20px;
+    }
+
+    .article-content li {
+        margin-bottom: 10px;
+    }
+
+    .article-content strong {
+        font-weight: 600;
+    }
+
+    .article-content em {
+        font-style: italic;
+    }
+
+    .article-content a {
+        color: var(--color-accent);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.3s ease;
+    }
+
+    .article-content a:hover {
+        border-bottom: 1px solid var(--color-accent);
     }
 
     /* СКЕЛЕТОН */
@@ -521,6 +564,13 @@
     }
 
     /* АДАПТИВНОСТЬ */
+    @media (max-width: 1024px) {
+        .footer-content {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+    }
+
     @media (max-width: 768px) {
         .app {
             max-width: 100%;
@@ -553,6 +603,10 @@
             padding: 0 20px;
         }
         
+        .nav-container {
+            padding: 0 20px;
+        }
+        
         .article-title {
             font-size: 1.8rem;
         }
@@ -579,7 +633,7 @@
     <nav class="main-nav">
     <div class="nav-container">
         <a href="index.html" class="nav-logo">Инакой</a>
-        <button class="hamburger" id="hamburger">
+        <button class="hamburger" id="hamburger" aria-label="Меню">
             <span></span>
             <span></span>
             <span></span>
@@ -625,7 +679,7 @@
             <h3>Контакты</h3>
             <ul class="footer-links">
                 <li><a href="mailto:inakoj.media@gmail.com">inakoj.media@gmail.com</a></li>
-                <li><a href="tel:+40 764 506 141">+40 (764) 506-141</a></li>
+                <li><a href="tel:+40764506141">+40 (764) 506-141</a></li>
             </ul>
         </div>
         <div class="footer-section">
@@ -692,14 +746,6 @@
             }
         });
         
-        document.addEventListener('click', function(e) {
-            if (navLinks.classList.contains('active') && 
-                !navLinks.contains(e.target) && 
-                !hamburger.contains(e.target)) {
-                closeMenu();
-            }
-        });
-        
         // Загружаем статью при загрузке страницы
         loadArticle();
     });
@@ -749,19 +795,27 @@
                 // Создаем попап
                 activePopover = document.createElement('div');
                 activePopover.className = 'footnote-popover active';
-                activePopover.innerHTML = footnoteText;
+                activePopover.innerHTML = marked.parse(footnoteText); // Парсим markdown в сноске
                 
                 // Позиционируем попап
                 const rect = this.getBoundingClientRect();
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
                 
-                let top = rect.bottom + scrollTop;
+                let top = rect.bottom + scrollTop + 10;
                 let left = rect.left + scrollLeft;
                 
                 // Корректируем позицию для мобильных устройств
                 if (window.innerWidth < 768) {
                     left = Math.max(10, left - 140);
+                    if (top + activePopover.offsetHeight > window.innerHeight + scrollTop) {
+                        top = rect.top + scrollTop - activePopover.offsetHeight - 10;
+                    }
+                }
+                
+                // Проверяем, не выходит ли попап за границы экрана
+                if (left + activePopover.offsetWidth > window.innerWidth) {
+                    left = window.innerWidth - activePopover.offsetWidth - 10;
                 }
                 
                 activePopover.style.top = top + 'px';
@@ -772,14 +826,24 @@
                 // Обработчики для закрытия
                 activeOverlay.addEventListener('click', closeActiveFootnote);
                 
-                document.addEventListener('keydown', function escHandler(e) {
+                const escHandler = function(e) {
                     if (e.key === 'Escape') {
                         closeActiveFootnote();
                     }
-                });
+                };
+                
+                document.addEventListener('keydown', escHandler);
                 
                 // Закрываем при скролле
-                window.addEventListener('scroll', closeActiveFootnote, { once: true });
+                const scrollHandler = function() {
+                    closeActiveFootnote();
+                };
+                
+                window.addEventListener('scroll', scrollHandler, { once: true });
+                
+                // Сохраняем ссылки на обработчики для удаления
+                activeOverlay.escHandler = escHandler;
+                activeOverlay.scrollHandler = scrollHandler;
             });
         });
     }
@@ -790,13 +854,15 @@
             activePopover = null;
         }
         if (activeOverlay) {
+            if (activeOverlay.escHandler) {
+                document.removeEventListener('keydown', activeOverlay.escHandler);
+            }
+            if (activeOverlay.scrollHandler) {
+                window.removeEventListener('scroll', activeOverlay.scrollHandler);
+            }
             activeOverlay.remove();
             activeOverlay = null;
         }
-        
-        // Удаляем обработчики
-        document.removeEventListener('keydown', closeActiveFootnote);
-        window.removeEventListener('scroll', closeActiveFootnote);
     }
     
     // Обработка сносок в Markdown
@@ -816,13 +882,17 @@
         }
         
         // Сохраняем сноски в глобальную переменную
-        currentFootnotes = Object.values(footnotes);
+        const sortedKeys = Object.keys(footnotes).sort((a, b) => parseInt(a) - parseInt(b));
+        currentFootnotes = sortedKeys.map(key => footnotes[key]);
         
         // Заменяем ссылки на сноски в тексте
         const refRegex = /\[\^(\d+)\]/g;
         markdown = markdown.replace(refRegex, function(match, number) {
-            const index = parseInt(number) - 1;
-            return `<button class="footnote-ref" data-footnote-index="${index}">${number}</button>`;
+            const index = sortedKeys.indexOf(number);
+            if (index !== -1) {
+                return `<button class="footnote-ref" data-footnote-index="${index}">${number}</button>`;
+            }
+            return match;
         });
         
         return markdown;
