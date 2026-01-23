@@ -54,5 +54,5 @@ OHCHR. Indigenous Peoples’ Rights in the Russian Federation. United Nations Hu
 https://www.ohchr.org
 
 [^1]: Здесь речь идет о концепции повседневного сопротивления, описанной Джеймсом Скоттом. 
-
 [^2]: Это перекликается с теорией М. де Серто о тактиках и стратегиях.
+
