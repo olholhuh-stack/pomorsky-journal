@@ -572,7 +572,398 @@
         }
     }
 </style>
+</head> 
+    <body> 
+    <!-- Оверлей для меню --> 
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <nav class="main-nav">
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">Инакой</a>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">О проекте</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+            <li><a href="admin/index.html" class="admin-link">Авторам</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="app">
+    <a href="index.html" class="back-button">← Назад к статьям</a>
+    
+    <div class="article-container" id="articleContainer">
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-meta"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text short"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text short"></div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>Инакой</h3>
+            <p>Цифровой архив и исследовательский проект, посвященный переосмыслению поморской и северной идентичности, в свете деколониальной мысли.</p>
+        </div>
+        <div class="footer-section">
+            <h3>Разделы</h3>
+            <ul class="footer-links">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="#articles">Все статьи</a></li>
+                <li><a href="#gallery">Галерея</a></li>
+                <li><a href="#archive">Архив</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Контакты</h3>
+            <ul class="footer-links">
+                <li><a href="mailto:inakoj.media@gmail.com">inakoj.media@gmail.com</a></li>
+                <li><a href="tel:+40 764 506 141">+40 (764) 506-141</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Ресурсы</h3>
+            <ul class="footer-links">
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+                <li><a href="#research">Исследования</a></li>
+                <li><a href="#subscribe">Подписаться</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2024 Инакой. Поморский журнал о деколониальности. Все права защищены.</p>
+    </div>
+</footer>
+
+<!-- Подключаем библиотеку для преобразования Markdown в HTML -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+    // МЕНЮ
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        const menuOverlay = document.getElementById('menuOverlay');
+        
+        function openMenu() {
+            hamburger.classList.add('active');
+            navLinks.classList.add('active');
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (navLinks.classList.contains('active')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+        
+        menuOverlay.addEventListener('click', function() {
+            closeMenu();
+        });
+        
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                closeMenu();
+            });
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                closeMenu();
+            }
+        });
+        
+        document.addEventListener('click', function(e) {
+            if (navLinks.classList.contains('active') && 
+                !navLinks.contains(e.target) && 
+                !hamburger.contains(e.target)) {
+                closeMenu();
+            }
+        });
+        
+        // Загружаем статью при загрузке страницы
+        loadArticle();
+    });
+
+    // ФУНКЦИЯ ДЛЯ УДАЛЕНИЯ FRONTMATTER (YAML ЗАГОЛОВКА)
+    function removeFrontmatter(markdown) {
+        // Ищем frontmatter в формате --- ... ---
+        const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
+        const match = markdown.match(frontmatterRegex);
+        
+        if (match) {
+            // Удаляем frontmatter и возвращаем остальной текст
+            return markdown.slice(match[0].length);
+        }
+        
+        // Если frontmatter не найден, возвращаем исходный текст
+        return markdown;
+    }
+
+    // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СНОСОК
+    let currentFootnotes = [];
+    let activePopover = null;
+    let activeOverlay = null;
+
+    // ФУНКЦИИ ДЛЯ РАБОТЫ СО СНОСКАМИ
+    function initFootnotes() {
+        const footnoteRefs = document.querySelectorAll('.footnote-ref');
+        
+        footnoteRefs.forEach(ref => {
+            ref.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const index = parseInt(this.getAttribute('data-footnote-index'));
+                const footnoteText = currentFootnotes[index];
+                
+                if (!footnoteText) return;
+                
+                // Закрываем предыдущую сноску, если она открыта
+                closeActiveFootnote();
+                
+                // Создаем оверлей
+                activeOverlay = document.createElement('div');
+                activeOverlay.className = 'footnote-overlay active';
+                document.body.appendChild(activeOverlay);
+                
+                // Создаем попап
+                activePopover = document.createElement('div');
+                activePopover.className = 'footnote-popover active';
+                activePopover.innerHTML = footnoteText;
+                
+                // Позиционируем попап
+                const rect = this.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+                
+                let top = rect.bottom + scrollTop;
+                let left = rect.left + scrollLeft;
+                
+                // Корректируем позицию для мобильных устройств
+                if (window.innerWidth < 768) {
+                    left = Math.max(10, left - 140);
+                }
+                
+                activePopover.style.top = top + 'px';
+                activePopover.style.left = left + 'px';
+                
+                document.body.appendChild(activePopover);
+                
+                // Обработчики для закрытия
+                activeOverlay.addEventListener('click', closeActiveFootnote);
+                
+                document.addEventListener('keydown', function escHandler(e) {
+                    if (e.key === 'Escape') {
+                        closeActiveFootnote();
+                    }
+                });
+                
+                // Закрываем при скролле
+                window.addEventListener('scroll', closeActiveFootnote, { once: true });
+            });
+        });
+    }
+    
+    function closeActiveFootnote() {
+        if (activePopover) {
+            activePopover.remove();
+            activePopover = null;
+        }
+        if (activeOverlay) {
+            activeOverlay.remove();
+            activeOverlay = null;
+        }
+        
+        // Удаляем обработчики
+        document.removeEventListener('keydown', closeActiveFootnote);
+        window.removeEventListener('scroll', closeActiveFootnote);
+    }
+    
+    // Обработка сносок в Markdown
+    function processFootnotes(markdown) {
+        // Сначала извлекаем сноски из текста
+        const footnoteRegex = /\[\^(\d+)\]:\s*(.*?)(?=\n\[\^\d+\]:|\n\n|$)/gs;
+        const footnotes = {};
+        
+        // Ищем все сноски
+        let match;
+        while ((match = footnoteRegex.exec(markdown)) !== null) {
+            const number = match[1];
+            const text = match[2].trim();
+            footnotes[number] = text;
+            // Удаляем сноску из основного текста
+            markdown = markdown.replace(match[0], '');
+        }
+        
+        // Сохраняем сноски в глобальную переменную
+        currentFootnotes = Object.values(footnotes);
+        
+        // Заменяем ссылки на сноски в тексте
+        const refRegex = /\[\^(\d+)\]/g;
+        markdown = markdown.replace(refRegex, function(match, number) {
+            const index = parseInt(number) - 1;
+            return `<button class="footnote-ref" data-footnote-index="${index}">${number}</button>`;
+        });
+        
+        return markdown;
+    }
+
+    // ЗАГРУЗКА СТАТЬИ
+    async function loadArticle() {
+        console.log('Начинаем загрузку статьи...');
+        
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+            console.log('ID статьи из URL:', articleId);
+            
+            if (!articleId) {
+                console.log('ID статьи не найден в URL');
+                document.getElementById('articleContainer').innerHTML = 
+                    '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Статья не найдена</div>';
+                return;
+            }
+
+            // Загружаем список статей
+            console.log('Загружаем articles-list.json...');
+            const response = await fetch('articles-list.json');
+            
+            if (!response.ok) {
+                console.error('Ошибка загрузки articles-list.json:', response.status);
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const articles = await response.json();
+            console.log('Список статей загружен:', articles);
+            
+            const article = articles.find(a => a.id == articleId);
+            console.log('Найдена статья:', article);
+            
+            if (!article) {
+                document.getElementById('articleContainer').innerHTML = 
+                    '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Статья не найдена</div>';
+                return;
+            }
+
+            // Загружаем содержимое статьи
+            let content = '';
+            try {
+                console.log('Загружаем содержимое статьи из:', article.contentFile);
+                const contentResponse = await fetch(article.contentFile);
+                
+                if (contentResponse.ok) {
+                    let markdown = await contentResponse.text();
+                    console.log('Markdown загружен, длина:', markdown.length);
+                    
+                    // УДАЛЯЕМ FRONTMATTER ПЕРЕД ПРЕОБРАЗОВАНИЕМ
+                    markdown = removeFrontmatter(markdown);
+                    console.log('После удаления frontmatter:', markdown.length);
+                    
+                    // Обрабатываем сноски
+                    markdown = processFootnotes(markdown);
+                    console.log('После обработки сносок:', markdown.length);
+                    
+                    // Преобразуем Markdown в HTML
+                    content = marked.parse(markdown);
+                    console.log('Markdown преобразован в HTML');
+                } else {
+                    console.error('Ошибка загрузки содержимого статьи:', contentResponse.status);
+                    // Если файл не найден, создаем демо-контент
+                    content = createDemoContent(article);
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки содержимого статьи:', error);
+                content = createDemoContent(article);
+            }
+
+            displayArticle(article, content);
+            
+        } catch (error) {
+            console.error('Ошибка загрузки статьи:', error);
+            document.getElementById('articleContainer').innerHTML = 
+                '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Ошибка загрузки статьи. Пожалуйста, попробуйте позже.</div>';
+        }
+    }
+    
+    function createDemoContent(article) {
+        return `
+            <p>Это демонстрационное содержание для статьи "${article.title}".</p>
+            <p>В реальной системе здесь будет загружен Markdown файл из папки articles.</p>
+            <h2>О статье</h2>
+            <p>Автор: ${article.author}</p>
+            <p>Дата публикации: ${new Date(article.date).toLocaleDateString('ru-RU')}</p>
+            <p>Категория: ${article.category}</p>
+            ${article.tags ? `<p>Теги: ${article.tags.join(', ')}</p>` : ''}
+            <h2>Краткое содержание</h2>
+            <p>${article.excerpt}</p>
+            <h2>Основной текст</h2>
+            <p>Основной текст статьи будет загружен из соответствующего Markdown файла.</p>
+            <blockquote>Это пример цитаты из статьи, оформленной в стиле журнала.</blockquote>
+            <p>Статья завершается выводами и заключением по теме исследования.</p>
+        `;
+    }
+    
+    function displayArticle(article, content) {
+        const container = document.getElementById('articleContainer');
+        
+        // Обновляем заголовок страницы
+        document.title = `${article.title} - Инакой`;
+        
+        container.innerHTML = `
+            <div class="article-header">
+                <div class="article-category">${article.category}</div>
+                <h1 class="article-title">${article.title}</h1>
+                <div class="article-meta">
+                    <span class="article-author">${article.author}</span>
+                    <span class="article-date">${new Date(article.date).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                </div>
+            </div>
+            <div class="article-content">
+                ${content}
+            </div>
+        `;
+        
+        console.log('Статья отображена, инициализируем сноски...');
+        
+        // Инициализируем сноски после загрузки статьи
+        setTimeout(() => {
+            initFootnotes();
+            console.log('Сноски инициализированы');
+        }, 100);
+    }
+</script>
+
+<!-- Netlify Identity -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+    if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+            if (!user) {
+                window.netlifyIdentity.on("login", () => {
+                    document.location.href = "/admin/";
+                });
+            }
+        });
+    }
+</script>
 </body> </html>
-
-
-
