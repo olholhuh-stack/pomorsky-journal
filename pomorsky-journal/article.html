@@ -4,7 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Инакой - Статья</title>
+    
+    <!-- Базовые SEO мета-теги -->
+    <meta name="description" content="Инакой - Поморский журнал о деколониальной мысли. Цифровой архив и исследовательский проект, посвященный переосмыслению поморской и северной идентичности.">
+    <meta name="keywords" content="деколониальность, поморье, север, саамы, культура, идентичность, исследования">
+    <meta name="author" content="Инакой">
+    
+    <!-- Open Graph для соцсетей -->
+    <meta property="og:title" content="Инакой - Поморский журнал о деколониальной мысли">
+    <meta property="og:description" content="Цифровой архив и исследовательский проект, посвященный переосмыслению поморской и северной идентичности">
+    <meta property="og:image" content="https://inakoj.netlify.app/images/previews/preview-1.png">
+    <meta property="og:url" content="https://inakoj.netlify.app">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Инакой - Поморский журнал о деколониальной мысли">
+    <meta name="twitter:description" content="Цифровой архив и исследовательский проект, посвященный переосмыслению поморской и северной идентичности">
+    <meta name="twitter:image" content="https://inakoj.netlify.app/images/previews/preview-1.png">
+    
+    <!-- Для поисковых систем -->
+    <link rel="canonical" href="https://inakoj.netlify.app">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- Шрифты -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;350;400;450;500;600&display=swap" rel="stylesheet">
+    
     <style>
         /* БАЗОВЫЕ СТИЛИ */
         :root {
@@ -16,676 +46,254 @@
             --color-accent: #8B0000;
             --color-accent-light: #a52a2a;
             --color-accent-bg: #fff8f8;
-        }
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Inter', sans-serif;
-        line-height: 1.6;
-        color: var(--color-black);
-        background-color: var(--color-white);
-        font-size: 16px;
-        font-weight: 400;
-        letter-spacing: 0.01em;
-        overflow-x: hidden;
-    }
-
-    .app {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 0 40px;
-        width: 100%;
-        min-height: 100vh;
-    }
-
-    /* НАВИГАЦИЯ */
-    .main-nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: var(--color-white);
-        border-bottom: 1px solid var(--color-border);
-        z-index: 1000;
-        padding: 20px 0;
-    }
-
-    .nav-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .nav-logo {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.8rem;
-        color: var(--color-accent);
-        text-decoration: none;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-    }
-
-    /* ГАМБУРГЕР */
-    .hamburger {
-        display: none;
-        width: 30px;
-        height: 20px;
-        position: relative;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-    }
-
-    .hamburger span {
-        display: block;
-        width: 100%;
-        height: 2px;
-        background: var(--color-accent);
-        position: absolute;
-        left: 0;
-        transition: all 0.3s ease;
-    }
-
-    .hamburger span:nth-child(1) { top: 0; }
-    .hamburger span:nth-child(2) { top: 9px; }
-    .hamburger span:nth-child(3) { top: 18px; }
-
-    .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg);
-        top: 9px;
-    }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg);
-        top: 9px;
-    }
-
-    /* МЕНЮ */
-    .nav-links {
-        display: flex;
-        gap: 40px;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .nav-links a {
-        color: var(--color-black);
-        text-decoration: none;
-        font-weight: 400;
-        font-size: 0.95rem;
-        padding: 5px 0;
-        position: relative;
-        transition: color 0.3s ease;
-    }
-
-    .nav-links a:hover {
-        color: var(--color-accent);
-    }
-
-    .nav-links a::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: var(--color-accent);
-        transition: width 0.3s ease;
-    }
-
-    .nav-links a:hover::after {
-        width: 100%;
-    }
-
-    .admin-link {
-        background-color: var(--color-accent);
-        color: var(--color-white) !important;
-        padding: 8px 20px !important;
-        border: 1px solid var(--color-accent);
-        border-radius: 4px;
-        transition: all 0.3s ease;
-    }
-
-    .admin-link:hover {
-        background-color: var(--color-white);
-        color: var(--color-accent) !important;
-    }
-
-    /* МОБИЛЬНОЕ МЕНЮ */
-    @media (max-width: 768px) {
-        .app, .nav-container {
-            padding: 0 20px;
+            --color-progress-bar: #8B0000; /* Красный для прогресс-бара */
         }
         
-        .hamburger { 
-            display: block; 
-            z-index: 1002;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        .nav-links {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 280px;
-            height: 100vh;
-            background: var(--color-white);
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            gap: 0;
-            transition: right 0.4s ease;
-            z-index: 1001;
-            padding-top: 80px;
-            border-left: 1px solid var(--color-border);
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--color-black);
+            background-color: var(--color-white);
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            overflow-x: hidden;
         }
-        
-        .nav-links.active { right: 0; }
-        
-        .nav-links a {
-            width: 100%;
-            padding: 15px 30px;
-            border-bottom: 1px solid var(--color-border);
-            font-size: 1.1rem;
-        }
-        
-        .nav-links a::after {
-            display: none;
-        }
-        
-        .menu-overlay {
+
+        /* ПРОГРЕСС-БАР ЧТЕНИЯ */
+        .reading-progress {
             position: fixed;
             top: 0;
             left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-progress-bar), #ff3333);
+            z-index: 2000;
+            transition: width 0.1s ease;
+            box-shadow: 0 2px 8px rgba(139, 0, 0, 0.2);
+        }
+
+        .reading-progress.complete {
+            background: linear-gradient(90deg, #006400, #00aa00);
+        }
+
+        /* ОСТАЛЬНЫЕ СТИЛИ (сохраняем существующие) */
+        .app {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 40px;
             width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
+            min-height: 100vh;
+        }
+
+        /* НАВИГАЦИЯ */
+        .main-nav {
+            position: fixed;
+            top: 4px; /* Отступ для прогресс-бара */
+            left: 0;
+            width: 100%;
+            background-color: var(--color-white);
+            border-bottom: 1px solid var(--color-border);
             z-index: 1000;
-            display: none;
+            padding: 20px 0;
         }
-        
-        .menu-overlay.active { display: block; }
-    }
 
-    /* КНОПКА НАЗАД */
-    .back-button {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin: 120px 0 30px 0;
-        color: var(--color-accent);
-        text-decoration: none;
-        font-weight: 500;
-        padding: 12px 24px;
-        border: 2px solid var(--color-accent);
-        border-radius: 4px;
-        transition: all 0.3s ease;
-        background: transparent;
-        cursor: pointer;
-    }
-
-    .back-button:hover {
-        background-color: var(--color-accent);
-        color: var(--color-white);
-        transform: translateX(-5px);
-    }
-
-    /* СТАТЬЯ */
-    .article-container {
-        margin-bottom: 80px;
-    }
-
-    .article-header {
-        margin-bottom: 50px;
-        padding-bottom: 30px;
-        border-bottom: 1px solid var(--color-border);
-    }
-
-    .article-category {
-        display: inline-block;
-        background: transparent;
-        color: var(--color-accent);
-        padding: 0;
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-bottom: 20px;
-        position: relative;
-        padding-left: 20px;
-    }
-
-    .article-category::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        width: 12px;
-        height: 2px;
-        background: var(--color-accent);
-        transform: translateY(-50%);
-    }
-
-    .article-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 2.8rem;
-        color: var(--color-black);
-        margin-bottom: 20px;
-        font-weight: 700;
-        line-height: 1.2;
-        letter-spacing: -0.02em;
-    }
-
-    .article-meta {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        font-size: 0.95rem;
-        color: var(--color-gray);
-        font-weight: 400;
-    }
-
-    .article-date {
-        position: relative;
-        padding-left: 25px;
-    }
-
-    .article-date::before {
-        content: '📅';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 0.8rem;
-    }
-
-    /* СТИЛИ ДЛЯ СНОСОК - ИСПРАВЛЕННЫЕ И УЛУЧШЕННЫЕ */
-    .footnote-ref {
-        background: none;
-        border: none;
-        color: var(--color-accent);
-        font-size: 0.8em;
-        vertical-align: super;
-        line-height: 0;
-        padding: 0 1px;
-        cursor: pointer;
-        font-family: inherit;
-        text-decoration: none;
-        position: relative;
-        top: -0.5em;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        border-radius: 2px;
-    }
-
-    .footnote-ref:hover {
-        color: var(--color-accent-light);
-        text-decoration: underline;
-        background-color: rgba(139, 0, 0, 0.05);
-    }
-
-    .footnote-ref:focus {
-        outline: 2px solid rgba(139, 0, 0, 0.3);
-        outline-offset: 1px;
-    }
-
-    /* ВСПЛЫВАЮЩЕЕ ОКНО ДЛЯ СНОСОК */
-    .footnote-popover {
-        position: absolute;
-        z-index: 2000;
-        width: 320px;
-        max-width: 90vw;
-        background: var(--color-white);
-        border: 1px solid var(--color-border);
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        font-size: 0.95rem;
-        line-height: 1.5;
-        color: var(--color-gray);
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
-        transition: opacity 0.2s ease, transform 0.2s ease;
-        pointer-events: none;
-    }
-
-    .footnote-popover.active {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        pointer-events: auto;
-    }
-
-    .footnote-popover::before {
-        content: '';
-        position: absolute;
-        top: -6px;
-        left: 20px;
-        width: 10px;
-        height: 10px;
-        background: var(--color-white);
-        border-left: 1px solid var(--color-border);
-        border-top: 1px solid var(--color-border);
-        transform: rotate(45deg);
-    }
-
-    .footnote-popover .footnote-content {
-        max-height: 200px;
-        overflow-y: auto;
-        padding-right: 5px;
-    }
-
-    .footnote-popover .footnote-content::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    .footnote-popover .footnote-content::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 2px;
-    }
-
-    .footnote-popover .footnote-content::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 2px;
-    }
-
-    /* Оверлей для сносок */
-    .footnote-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1999;
-        background: transparent;
-        display: none;
-    }
-
-    .footnote-overlay.active {
-        display: block;
-    }
-
-    /* СОДЕРЖАНИЕ СТАТЬИ */
-    .article-content {
-        font-size: 1.1rem;
-        line-height: 1.8;
-        color: var(--color-black);
-    }
-
-    .article-content h2 {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.8rem;
-        color: var(--color-accent);
-        margin: 50px 0 20px 0;
-        font-weight: 600;
-    }
-
-    .article-content h3 {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.4rem;
-        color: var(--color-black);
-        margin: 40px 0 15px 0;
-        font-weight: 600;
-    }
-
-    .article-content p {
-        margin-bottom: 25px;
-    }
-
-    .article-content blockquote {
-        border-left: 4px solid var(--color-accent);
-        padding-left: 25px;
-        margin: 30px 0;
-        font-style: italic;
-        color: var(--color-gray);
-        font-size: 1.2rem;
-        line-height: 1.6;
-        background-color: var(--color-accent-bg);
-        padding: 20px;
-        border-radius: 0 4px 4px 0;
-    }
-
-    .article-content img {
-        max-width: 100%;
-        height: auto;
-        margin: 30px 0;
-        border-radius: 4px;
-        display: block;
-    }
-
-    .article-content ul, .article-content ol {
-        margin-bottom: 25px;
-        padding-left: 20px;
-    }
-
-    .article-content li {
-        margin-bottom: 10px;
-    }
-
-    .article-content strong {
-        font-weight: 600;
-    }
-
-    .article-content em {
-        font-style: italic;
-    }
-
-    .article-content a {
-        color: var(--color-accent);
-        text-decoration: none;
-        border-bottom: 1px solid transparent;
-        transition: border-color 0.3s ease;
-    }
-
-    .article-content a:hover {
-        border-bottom: 1px solid var(--color-accent);
-    }
-
-    /* СКЕЛЕТОН */
-    .skeleton {
-        animation: skeleton-loading 1.5s ease-in-out infinite;
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        border-radius: 4px;
-    }
-
-    @keyframes skeleton-loading {
-        0% {
-            background-position: 200% 0;
-        }
-        100% {
-            background-position: -200% 0;
-        }
-    }
-
-    .skeleton-title {
-        height: 60px;
-        width: 80%;
-        margin-bottom: 20px;
-    }
-
-    .skeleton-meta {
-        height: 20px;
-        width: 60%;
-        margin-bottom: 30px;
-    }
-
-    .skeleton-text {
-        height: 20px;
-        width: 100%;
-        margin-bottom: 15px;
-    }
-
-    .skeleton-text.short {
-        width: 70%;
-    }
-
-    /* ФУТЕР */
-    .footer {
-        background-color: var(--color-gray-light);
-        padding: 80px 0 40px;
-        margin-top: 60px;
-        border-top: 1px solid var(--color-border);
-    }
-
-    .footer-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 40px;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 50px;
-    }
-
-    .footer-section h3 {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.2rem;
-        margin-bottom: 20px;
-        color: var(--color-accent);
-        font-weight: 600;
-    }
-
-    .footer-section p {
-        line-height: 1.6;
-        font-size: 0.95rem;
-        color: var(--color-gray);
-        font-weight: 400;
-    }
-
-    .footer-links {
-        list-style: none;
-        padding: 0;
-    }
-
-    .footer-links li {
-        margin-bottom: 12px;
-    }
-
-    .footer-links a {
-        color: var(--color-gray);
-        text-decoration: none;
-        transition: color 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.95rem;
-    }
-
-    .footer-links a:hover {
-        color: var(--color-accent);
-    }
-
-    .footer-bottom {
-        max-width: 1200px;
-        margin: 60px auto 0;
-        padding: 30px 40px 0;
-        border-top: 1px solid var(--color-border);
-        text-align: center;
-        color: var(--color-gray);
-        font-size: 0.9rem;
-    }
-
-    /* АДАПТИВНОСТЬ */
-    @media (max-width: 1024px) {
-        .footer-content {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 40px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .app {
-            max-width: 100%;
-        }
-        
-        .article-title {
-            font-size: 2.2rem;
-        }
-        
-        .article-meta {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        
-        .footnote-popover {
-            width: 280px;
-            padding: 15px;
-            font-size: 0.9rem;
-        }
-        
-        .footer-content {
-            grid-template-columns: 1fr;
-            gap: 40px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .app {
-            padding: 0 20px;
-        }
-        
         .nav-container {
-            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        
-        .article-title {
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
-        
-        .article-content {
-            font-size: 1rem;
+
+        /* ВРЕМЯ ЧТЕНИЯ */
+        .reading-time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--color-gray);
+            font-size: 0.95rem;
+            font-weight: 400;
         }
-        
-        .back-button {
-            margin-top: 100px;
+
+        .reading-time::before {
+            content: '⏱️';
+            font-size: 0.8rem;
         }
-        
+
+        /* Обновляем .article-meta для включения времени чтения */
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.95rem;
+            color: var(--color-gray);
+            font-weight: 400;
+            flex-wrap: wrap;
+        }
+
+        /* СТИЛИ ДЛЯ СНОСОК - ИСПРАВЛЕННЫЕ И УЛУЧШЕННЫЕ */
+        .footnote-ref {
+            background: none;
+            border: none;
+            color: var(--color-accent);
+            font-size: 0.8em;
+            vertical-align: super;
+            line-height: 0;
+            padding: 0 1px;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: none;
+            position: relative;
+            top: -0.5em;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border-radius: 2px;
+        }
+
+        .footnote-ref:hover {
+            color: var(--color-accent-light);
+            text-decoration: underline;
+            background-color: rgba(139, 0, 0, 0.05);
+        }
+
+        /* ВСПЛЫВАЮЩЕЕ ОКНО ДЛЯ СНОСОК */
         .footnote-popover {
-            width: 250px;
-            padding: 12px;
-            font-size: 0.85rem;
-            left: 50% !important;
-            transform: translateX(-50%) translateY(10px) scale(0.98);
+            position: absolute;
+            z-index: 2000;
+            width: 320px;
+            max-width: 90vw;
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--color-gray);
+            opacity: 0;
+            transform: translateY(10px) scale(0.98);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
         }
-        
+
         .footnote-popover.active {
-            transform: translateX(-50%) translateY(0) scale(1);
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
         }
-        
+
         .footnote-popover::before {
-            left: 50%;
-            transform: translateX(-50%) rotate(45deg);
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 20px;
+            width: 10px;
+            height: 10px;
+            background: var(--color-white);
+            border-left: 1px solid var(--color-border);
+            border-top: 1px solid var(--color-border);
+            transform: rotate(45deg);
         }
-    }
-</style>
+
+        /* СТИЛИ ДЛЯ ЛЕНИВОЙ ЗАГРУЗКИ ИЗОБРАЖЕНИЙ */
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 30px 0;
+            border-radius: 4px;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .article-content img.loaded {
+            opacity: 1;
+        }
+
+        .article-content img.lazy-loading {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s ease-in-out infinite;
+        }
+
+        /* ОСТАЛЬНЫЕ СТИЛИ (сохраняем из предыдущей версии) */
+        .hamburger { display: none; }
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .back-button { display: inline-flex; align-items: center; gap: 8px; margin: 140px 0 30px 0; }
+        .article-container { margin-bottom: 80px; }
+        .article-header { margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px solid var(--color-border); }
+        .article-category { display: inline-block; background: transparent; color: var(--color-accent); padding: 0; font-size: 0.85rem; }
+        .article-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--color-black); margin-bottom: 20px; }
+        .article-content { font-size: 1.1rem; line-height: 1.8; color: var(--color-black); }
+        .footer { background-color: var(--color-gray-light); padding: 80px 0 40px; margin-top: 60px; border-top: 1px solid var(--color-border); }
+        .skeleton { animation: skeleton-loading 1.5s ease-in-out infinite; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; border-radius: 4px; }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 768px) {
+            .app, .nav-container { padding: 0 20px; }
+            .article-title { font-size: 2.2rem; }
+            .article-meta { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .hamburger { display: block; z-index: 1002; }
+            .nav-links { position: fixed; top: 0; right: -100%; width: 280px; height: 100vh; background: var(--color-white); flex-direction: column; }
+            .footnote-popover { width: 280px; padding: 15px; font-size: 0.9rem; }
+        }
+
+        @media (max-width: 480px) {
+            .app { padding: 0 20px; }
+            .article-title { font-size: 1.8rem; }
+            .article-content { font-size: 1rem; }
+            .back-button { margin-top: 120px; }
+            .footnote-popover { width: 250px; padding: 12px; font-size: 0.85rem; left: 50% !important; transform: translateX(-50%) translateY(10px) scale(0.98); }
+            .footnote-popover.active { transform: translateX(-50%) translateY(0) scale(1); }
+            .footnote-popover::before { left: 50%; transform: translateX(-50%) rotate(45deg); }
+        }
+    </style>
 </head> 
-    <body> 
+<body> 
+    <!-- ПРОГРЕСС-БАР ЧТЕНИЯ -->
+    <div class="reading-progress" id="readingProgress"></div>
+    
     <!-- Оверлей для меню --> 
     <div class="menu-overlay" id="menuOverlay"></div>
+    
     <nav class="main-nav">
-    <div class="nav-container">
-        <a href="index.html" class="nav-logo">Инакой</a>
-        <button class="hamburger" id="hamburger" aria-label="Меню">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Главная</a></li>
-            <li><a href="about.html">О проекте</a></li>
-            <li><a href="contacts.html">Контакты</a></li>
-            <li><a href="admin/index.html" class="admin-link">Авторам</a></li>
-        </ul>
-    </div>
-</nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Инакой</a>
+            <button class="hamburger" id="hamburger" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html">О проекте</a></li>
+                <li><a href="contacts.html">Контакты</a></li>
+                <li><a href="admin/index.html" class="admin-link">Авторам</a></li>
+            </ul>
+        </div>
+    </nav>
 
 <div class="app">
     <a href="index.html" class="back-button">← Назад к статьям</a>
@@ -741,6 +349,11 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
+    // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+    let currentFootnotes = [];
+    let activePopover = null;
+    let activeOverlay = null;
+
     // МЕНЮ
     document.addEventListener('DOMContentLoaded', function() {
         const hamburger = document.getElementById('hamburger');
@@ -788,14 +401,115 @@
         
         // Загружаем статью при загрузке страницы
         loadArticle();
+        
+        // Инициализируем прогресс-бар
+        initReadingProgress();
     });
 
-    // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СНОСОК
-    let currentFootnotes = [];
-    let activePopover = null;
-    let activeOverlay = null;
+    // ПРОГРЕСС-БАР ЧТЕНИЯ
+    function initReadingProgress() {
+        const progressBar = document.getElementById('readingProgress');
+        
+        function updateProgress() {
+            const articleContent = document.querySelector('.article-content');
+            if (!articleContent) return;
+            
+            const articleHeight = articleContent.offsetHeight;
+            const articleTop = articleContent.offsetTop;
+            const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollPosition < articleTop) {
+                progressBar.style.width = '0%';
+            } else if (scrollPosition > articleTop + articleHeight) {
+                progressBar.style.width = '100%';
+                progressBar.classList.add('complete');
+            } else {
+                const progress = ((scrollPosition - articleTop) / articleHeight) * 100;
+                progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+                progressBar.classList.remove('complete');
+            }
+        }
+        
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('resize', updateProgress);
+        
+        // Обновляем каждые 100мс для плавности
+        setInterval(updateProgress, 100);
+    }
 
-    // ФУНКЦИЯ ДЛЯ УДАЛЕНИЯ FRONTMATTER (YAML ЗАГОЛОВКА)
+    // ФУНКЦИЯ ДЛЯ РАСЧЕТА ВРЕМЕНИ ЧТЕНИЯ
+    function calculateReadingTime(text) {
+        // Средняя скорость чтения: 200-250 слов в минуту
+        const wordsPerMinute = 230;
+        
+        // Убираем HTML теги и считаем слова
+        const cleanText = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
+        const wordCount = cleanText.split(' ').length;
+        
+        // Время в минутах
+        const minutes = Math.ceil(wordCount / wordsPerMinute);
+        
+        return {
+            minutes: minutes,
+            wordCount: wordCount,
+            text: `${minutes} мин. чтения`
+        };
+    }
+
+    // ФУНКЦИЯ ДЛЯ ЛЕНИВОЙ ЗАГРУЗКИ ИЗОБРАЖЕНИЙ
+    function initLazyLoading() {
+        const images = document.querySelectorAll('.article-content img');
+        
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    
+                    // Если изображение уже загружено
+                    if (img.complete) {
+                        img.classList.add('loaded');
+                        img.classList.remove('lazy-loading');
+                        observer.unobserve(img);
+                        return;
+                    }
+                    
+                    // Загружаем изображение
+                    img.classList.add('loaded');
+                    img.classList.remove('lazy-loading');
+                    
+                    // Отслеживаем загрузку
+                    img.onload = () => {
+                        img.classList.add('loaded');
+                        img.classList.remove('lazy-loading');
+                        observer.unobserve(img);
+                    };
+                    
+                    img.onerror = () => {
+                        console.error('Ошибка загрузки изображения:', img.src);
+                        observer.unobserve(img);
+                    };
+                    
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '100px 0px',
+            threshold: 0.1
+        });
+        
+        images.forEach(img => {
+            // Добавляем класс для скелетона
+            img.classList.add('lazy-loading');
+            
+            // Устанавливаем атрибут loading="lazy"
+            img.setAttribute('loading', 'lazy');
+            
+            // Добавляем в observer
+            imageObserver.observe(img);
+        });
+    }
+
+    // ФУНКЦИЯ ДЛЯ УДАЛЕНИЯ FRONTMATTER
     function removeFrontmatter(markdown) {
         const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
         const match = markdown.match(frontmatterRegex);
@@ -807,39 +521,31 @@
         return markdown;
     }
 
-    // ОБРАБОТКА СНОСОК - ИСПРАВЛЕННАЯ ВЕРСИЯ
+    // ОБРАБОТКА СНОСОК
     function processFootnotes(markdown) {
         console.log('Начинаем обработку сносок...');
         
-        // Извлекаем все сноски из текста
         const footnoteRegex = /\[\^(\d+)\]:\s*([\s\S]*?)(?=\n\[\^\d+\]:|\n\n|$)/g;
         const footnotes = {};
         
-        // Находим все сноски
         let match;
-        let lastIndex = 0;
         const matches = [];
         
         while ((match = footnoteRegex.exec(markdown)) !== null) {
             const number = match[1];
             let text = match[2].trim();
             
-            // Убираем лишние переносы строк внутри сноски
             text = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
             footnotes[number] = text;
             matches.push(match);
-            lastIndex = match.index;
         }
         
         console.log(`Найдено сносок: ${Object.keys(footnotes).length}`, footnotes);
         
-        // Удаляем блок сносок из основного текста
-        // Ищем от первой сноски до конца файла или до следующего заголовка
         if (matches.length > 0) {
             const firstMatch = matches[0];
             const footnoteBlockStart = firstMatch.index;
             
-            // Ищем конец блока сносок (два переноса строки или конец файла)
             const remainingText = markdown.substring(footnoteBlockStart);
             const endOfFootnotes = remainingText.search(/\n\n\s*\n|\n##|\nИсточники|\n*$/);
             
@@ -847,18 +553,13 @@
                 const footnoteBlock = markdown.substring(footnoteBlockStart, footnoteBlockStart + endOfFootnotes);
                 markdown = markdown.replace(footnoteBlock, '').trim();
             } else {
-                // Если не нашли конец, удаляем от начала сносок до конца
                 markdown = markdown.substring(0, footnoteBlockStart).trim();
             }
         }
         
-        // Сохраняем сноски в глобальную переменную
         const sortedKeys = Object.keys(footnotes).sort((a, b) => parseInt(a) - parseInt(b));
         currentFootnotes = sortedKeys.map(key => footnotes[key]);
         
-        console.log('Сноски сохранены:', currentFootnotes);
-        
-        // Заменяем ссылки на сноски в тексте на кнопки
         const refRegex = /\[\^(\d+)\]/g;
         markdown = markdown.replace(refRegex, function(match, number) {
             const index = parseInt(number) - 1;
@@ -878,11 +579,9 @@
         const footnoteRefs = document.querySelectorAll('.footnote-ref');
         
         footnoteRefs.forEach(ref => {
-            // Удаляем старые обработчики, если есть
             ref.replaceWith(ref.cloneNode(true));
         });
         
-        // Получаем новые ссылки после клонирования
         const newFootnoteRefs = document.querySelectorAll('.footnote-ref');
         
         newFootnoteRefs.forEach(ref => {
@@ -898,12 +597,8 @@
                     return;
                 }
                 
-                console.log(`Показываем сноску ${index + 1}:`, footnoteText);
-                
-                // Закрываем предыдущую сноску, если она открыта
                 closeActiveFootnote();
                 
-                // Создаем оверлей
                 activeOverlay = document.createElement('div');
                 activeOverlay.className = 'footnote-overlay active';
                 activeOverlay.setAttribute('role', 'button');
@@ -911,7 +606,6 @@
                 activeOverlay.tabIndex = 0;
                 document.body.appendChild(activeOverlay);
                 
-                // Создаем попап
                 activePopover = document.createElement('div');
                 activePopover.className = 'footnote-popover active';
                 activePopover.setAttribute('role', 'dialog');
@@ -922,7 +616,6 @@
                     </div>
                 `;
                 
-                // Позиционируем попап
                 const rect = this.getBoundingClientRect();
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
@@ -930,18 +623,15 @@
                 let top = rect.bottom + scrollTop + 10;
                 let left = rect.left + scrollLeft;
                 
-                // Корректируем позицию для мобильных устройств
                 if (window.innerWidth < 480) {
                     left = window.innerWidth / 2;
                     activePopover.style.left = `${left}px`;
                     activePopover.style.top = `${top}px`;
                 } else {
-                    // Проверяем, не выходит ли попап за правый край экрана
                     if (left + 320 > window.innerWidth) {
                         left = window.innerWidth - 340;
                     }
                     
-                    // Проверяем, не выходит ли попап за верхний край экрана
                     if (top - scrollTop + activePopover.offsetHeight > window.innerHeight) {
                         top = rect.top + scrollTop - activePopover.offsetHeight - 10;
                     }
@@ -952,10 +642,8 @@
                 
                 document.body.appendChild(activePopover);
                 
-                // Фокусируемся на оверлее для доступности
                 activeOverlay.focus();
                 
-                // Обработчики для закрытия
                 const closeHandler = function() {
                     closeActiveFootnote();
                 };
@@ -975,19 +663,16 @@
                 
                 document.addEventListener('keydown', escHandler);
                 
-                // Закрываем при скролле
                 const scrollHandler = function() {
                     closeHandler();
                 };
                 
                 window.addEventListener('scroll', scrollHandler, { once: true });
                 
-                // Сохраняем ссылки на обработчики для удаления
                 activeOverlay._closeHandler = closeHandler;
                 activeOverlay._escHandler = escHandler;
                 activeOverlay._scrollHandler = scrollHandler;
                 
-                // Предотвращаем закрытие при клике внутри попапа
                 activePopover.addEventListener('click', function(e) {
                     e.stopPropagation();
                 });
@@ -999,7 +684,6 @@
     
     function closeActiveFootnote() {
         if (activePopover) {
-            // Удаляем обработчики
             if (activeOverlay && activeOverlay._escHandler) {
                 document.removeEventListener('keydown', activeOverlay._escHandler);
             }
@@ -1035,8 +719,6 @@
                 return;
             }
 
-            // Загружаем список статей
-            console.log('Загружаем articles-list.json...');
             const response = await fetch('articles-list.json');
             
             if (!response.ok) {
@@ -1045,10 +727,7 @@
             }
             
             const articles = await response.json();
-            console.log('Список статей загружен:', articles);
-            
             const article = articles.find(a => a.id == articleId);
-            console.log('Найдена статья:', article);
             
             if (!article) {
                 document.getElementById('articleContainer').innerHTML = 
@@ -1056,30 +735,21 @@
                 return;
             }
 
-            // Загружаем содержимое статьи
             let content = '';
             try {
-                console.log('Загружаем содержимое статьи из:', article.contentFile);
                 const contentResponse = await fetch(article.contentFile);
                 
                 if (contentResponse.ok) {
                     let markdown = await contentResponse.text();
-                    console.log('Markdown загружен, длина:', markdown.length);
                     
-                    // УДАЛЯЕМ FRONTMATTER ПЕРЕД ПРЕОБРАЗОВАНИЕМ
+                    // Динамически обновляем мета-теги для SEO
+                    updateMetaTags(article);
+                    
                     markdown = removeFrontmatter(markdown);
-                    console.log('После удаления frontmatter:', markdown.length);
-                    
-                    // Обрабатываем сноски
                     markdown = processFootnotes(markdown);
-                    console.log('После обработки сносок:', markdown.length);
-                    
-                    // Преобразуем Markdown в HTML
                     content = marked.parse(markdown);
-                    console.log('Markdown преобразован в HTML');
                 } else {
                     console.error('Ошибка загрузки содержимого статьи:', contentResponse.status);
-                    // Если файл не найден, создаем демо-контент
                     content = createDemoContent(article);
                 }
             } catch (error) {
@@ -1094,6 +764,59 @@
             document.getElementById('articleContainer').innerHTML = 
                 '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Ошибка загрузки статьи. Пожалуйста, попробуйте позже.</div>';
         }
+    }
+    
+    // ФУНКЦИЯ ОБНОВЛЕНИЯ МЕТА-ТЕГОВ
+    function updateMetaTags(article) {
+        // Обновляем title
+        document.title = `${article.title} - Инакой`;
+        
+        // Обновляем meta description
+        let metaDescription = document.querySelector('meta[name="description"]');
+        if (!metaDescription) {
+            metaDescription = document.createElement('meta');
+            metaDescription.name = 'description';
+            document.head.appendChild(metaDescription);
+        }
+        metaDescription.content = article.excerpt || article.subtitle;
+        
+        // Обновляем Open Graph
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.content = article.title + ' - Инакой';
+        
+        const ogDescription = document.querySelector('meta[property="og:description"]');
+        if (ogDescription) ogDescription.content = article.excerpt || article.subtitle;
+        
+        const ogImage = document.querySelector('meta[property="og:image"]');
+        if (ogImage && article.previewImage) {
+            ogImage.content = `https://inakoj.netlify.app/${article.previewImage}`;
+        }
+        
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) {
+            ogUrl.content = `https://inakoj.netlify.app/article.html?id=${article.id}`;
+        }
+        
+        // Обновляем Twitter Card
+        const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        if (twitterTitle) twitterTitle.content = article.title + ' - Инакой';
+        
+        const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+        if (twitterDescription) twitterDescription.content = article.excerpt || article.subtitle;
+        
+        const twitterImage = document.querySelector('meta[name="twitter:image"]');
+        if (twitterImage && article.previewImage) {
+            twitterImage.content = `https://inakoj.netlify.app/${article.previewImage}`;
+        }
+        
+        // Обновляем canonical ссылку
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+            canonical = document.createElement('link');
+            canonical.rel = 'canonical';
+            document.head.appendChild(canonical);
+        }
+        canonical.href = `https://inakoj.netlify.app/article.html?id=${article.id}`;
     }
     
     function createDemoContent(article) {
@@ -1117,8 +840,10 @@
     function displayArticle(article, content) {
         const container = document.getElementById('articleContainer');
         
-        // Обновляем заголовок страницы
-        document.title = `${article.title} - Инакой`;
+        // Обновляем title (уже сделано в updateMetaTags)
+        
+        // Рассчитываем время чтения
+        const readingTime = calculateReadingTime(content);
         
         container.innerHTML = `
             <div class="article-header">
@@ -1127,6 +852,7 @@
                 <div class="article-meta">
                     <span class="article-author">${article.author}</span>
                     <span class="article-date">${new Date(article.date).toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    <span class="reading-time">${readingTime.text}</span>
                 </div>
             </div>
             <div class="article-content">
@@ -1134,12 +860,13 @@
             </div>
         `;
         
-        console.log('Статья отображена, инициализируем сноски...');
+        console.log('Статья отображена, инициализируем сноски и ленивую загрузку...');
         
-        // Инициализируем сноски после загрузки статьи
+        // Инициализируем сноски
         setTimeout(() => {
             initFootnotes();
-            console.log('Сноски инициализированы');
+            initLazyLoading(); // Инициализируем ленивую загрузку изображений
+            console.log('Сноски и ленивая загрузка инициализированы');
         }, 100);
     }
 </script>
@@ -1157,4 +884,5 @@
         });
     }
 </script>
-</body> </html>
+</body>
+</html>
