@@ -48,228 +48,649 @@
             --color-accent-bg: #fff8f8;
             --color-progress-bar: #8B0000; /* Красный для прогресс-бара */
         }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        line-height: 1.6;
+        color: var(--color-black);
+        background-color: var(--color-white);
+        font-size: 16px;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+        overflow-x: hidden;
+    }
+
+    .app {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 40px;
+        width: 100%;
+        min-height: 100vh;
+    }
+
+    /* ПРОГРЕСС-БАР ЧТЕНИЯ */
+    .reading-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-progress-bar), #ff3333);
+        z-index: 2000;
+        transition: width 0.1s ease;
+        box-shadow: 0 2px 8px rgba(139, 0, 0, 0.2);
+    }
+
+    .reading-progress.complete {
+        background: linear-gradient(90deg, #006400, #00aa00);
+    }
+
+    /* НАВИГАЦИЯ */
+    .main-nav {
+        position: fixed;
+        top: 4px; /* Отступ для прогресс-бара */
+        left: 0;
+        width: 100%;
+        background-color: var(--color-white);
+        border-bottom: 1px solid var(--color-border);
+        z-index: 1000;
+        padding: 20px 0;
+    }
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav-logo {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: var(--color-accent);
+        text-decoration: none;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+
+    /* ГАМБУРГЕР */
+    .hamburger {
+        display: none;
+        width: 30px;
+        height: 20px;
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .hamburger span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: var(--color-accent);
+        position: absolute;
+        left: 0;
+        transition: all 0.3s ease;
+    }
+
+    .hamburger span:nth-child(1) { top: 0; }
+    .hamburger span:nth-child(2) { top: 9px; }
+    .hamburger span:nth-child(3) { top: 18px; }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg);
+        top: 9px;
+    }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg);
+        top: 9px;
+    }
+
+    /* МЕНЮ */
+    .nav-links {
+        display: flex;
+        gap: 40px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-links a {
+        color: var(--color-black);
+        text-decoration: none;
+        font-weight: 400;
+        font-size: 0.95rem;
+        padding: 5px 0;
+        position: relative;
+        transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        color: var(--color-accent);
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--color-accent);
+        transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .admin-link {
+        background-color: var(--color-accent);
+        color: var(--color-white) !important;
+        padding: 8px 20px !important;
+        border: 1px solid var(--color-accent);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .admin-link:hover {
+        background-color: var(--color-white);
+        color: var(--color-accent) !important;
+    }
+
+    /* МОБИЛЬНОЕ МЕНЮ */
+    @media (max-width: 768px) {
+        .app, .nav-container {
+            padding: 0 20px;
+        }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .hamburger { 
+            display: block; 
+            z-index: 1002;
         }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--color-black);
-            background-color: var(--color-white);
-            font-size: 16px;
-            font-weight: 400;
-            letter-spacing: 0.01em;
-            overflow-x: hidden;
+        
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: var(--color-white);
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            gap: 0;
+            transition: right 0.4s ease;
+            z-index: 1001;
+            padding-top: 80px;
+            border-left: 1px solid var(--color-border);
         }
-
-        /* ПРОГРЕСС-БАР ЧТЕНИЯ */
-        .reading-progress {
+        
+        .nav-links.active { right: 0; }
+        
+        .nav-links a {
+            width: 100%;
+            padding: 15px 30px;
+            border-bottom: 1px solid var(--color-border);
+            font-size: 1.1rem;
+        }
+        
+        .nav-links a::after {
+            display: none;
+        }
+        
+        .menu-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 0%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--color-progress-bar), #ff3333);
-            z-index: 2000;
-            transition: width 0.1s ease;
-            box-shadow: 0 2px 8px rgba(139, 0, 0, 0.2);
-        }
-
-        .reading-progress.complete {
-            background: linear-gradient(90deg, #006400, #00aa00);
-        }
-
-        /* ОСТАЛЬНЫЕ СТИЛИ (сохраняем существующие) */
-        .app {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 40px;
             width: 100%;
-            min-height: 100vh;
-        }
-
-        /* НАВИГАЦИЯ */
-        .main-nav {
-            position: fixed;
-            top: 4px; /* Отступ для прогресс-бара */
-            left: 0;
-            width: 100%;
-            background-color: var(--color-white);
-            border-bottom: 1px solid var(--color-border);
+            height: 100%;
+            background: rgba(0,0,0,0.5);
             z-index: 1000;
-            padding: 20px 0;
+            display: none;
         }
+        
+        .menu-overlay.active { display: block; }
+    }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+    /* КНОПКА НАЗАД */
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 140px 0 30px 0; /* Увеличил отступ из-за прогресс-бара */
+        color: var(--color-accent);
+        text-decoration: none;
+        font-weight: 500;
+        padding: 12px 24px;
+        border: 2px solid var(--color-accent);
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        background: transparent;
+        cursor: pointer;
+    }
+
+    .back-button:hover {
+        background-color: var(--color-accent);
+        color: var(--color-white);
+        transform: translateX(-5px);
+    }
+
+    /* СТАТЬЯ */
+    .article-container {
+        margin-bottom: 80px;
+    }
+
+    .article-header {
+        margin-bottom: 50px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .article-category {
+        display: inline-block;
+        background: transparent;
+        color: var(--color-accent);
+        padding: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 20px;
+    }
+
+    .article-category::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 12px;
+        height: 2px;
+        background: var(--color-accent);
+        transform: translateY(-50%);
+    }
+
+    .article-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        color: var(--color-black);
+        margin-bottom: 20px;
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+    }
+
+    /* ВРЕМЯ ЧТЕНИЯ */
+    .reading-time {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: var(--color-gray);
+        font-size: 0.95rem;
+        font-weight: 400;
+    }
+
+    .reading-time::before {
+        content: '⏱️';
+        font-size: 0.8rem;
+    }
+
+    .article-meta {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 0.95rem;
+        color: var(--color-gray);
+        font-weight: 400;
+        flex-wrap: wrap;
+    }
+
+    .article-date {
+        position: relative;
+        padding-left: 25px;
+    }
+
+    .article-date::before {
+        content: '📅';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.8rem;
+    }
+
+    /* СТИЛИ ДЛЯ СНОСОК */
+    .footnote-ref {
+        background: none;
+        border: none;
+        color: var(--color-accent);
+        font-size: 0.85em;
+        vertical-align: super;
+        line-height: 1;
+        padding: 0 2px;
+        cursor: pointer;
+        font-family: inherit;
+        text-decoration: none;
+        position: relative;
+        z-index: 1;
+        font-weight: 500;
+    }
+
+    .footnote-ref:hover {
+        text-decoration: underline;
+        color: var(--color-accent-light);
+    }
+
+    .footnote-popover {
+        position: absolute;
+        z-index: 1000;
+        max-width: 320px;
+        width: max-content;
+        background: var(--color-white);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: var(--color-gray);
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        pointer-events: none;
+    }
+
+    .footnote-popover.active {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+    }
+
+    .footnote-popover::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 20px;
+        width: 10px;
+        height: 10px;
+        background: var(--color-white);
+        border-left: 1px solid var(--color-border);
+        border-top: 1px solid var(--color-border);
+        transform: rotate(45deg);
+    }
+
+    /* Оверлей для сносок */
+    .footnote-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        background: transparent;
+        display: none;
+    }
+
+    .footnote-overlay.active {
+        display: block;
+    }
+
+    /* СОДЕРЖАНИЕ СТАТЬИ */
+    .article-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--color-black);
+    }
+
+    .article-content h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        color: var(--color-accent);
+        margin: 50px 0 20px 0;
+        font-weight: 600;
+    }
+
+    .article-content h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        color: var(--color-black);
+        margin: 40px 0 15px 0;
+        font-weight: 600;
+    }
+
+    .article-content p {
+        margin-bottom: 25px;
+    }
+
+    .article-content blockquote {
+        border-left: 4px solid var(--color-accent);
+        padding-left: 25px;
+        margin: 30px 0;
+        font-style: italic;
+        color: var(--color-gray);
+        font-size: 1.2rem;
+        line-height: 1.6;
+        background-color: var(--color-accent-bg);
+        padding: 20px;
+        border-radius: 0 4px 4px 0;
+    }
+
+    .article-content img {
+        max-width: 100%;
+        height: auto;
+        margin: 30px 0;
+        border-radius: 4px;
+        display: block;
+        loading: lazy;
+    }
+
+    .article-content ul, .article-content ol {
+        margin-bottom: 25px;
+        padding-left: 20px;
+    }
+
+    .article-content li {
+        margin-bottom: 10px;
+    }
+
+    .article-content strong {
+        font-weight: 600;
+    }
+
+    .article-content em {
+        font-style: italic;
+    }
+
+    .article-content a {
+        color: var(--color-accent);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.3s ease;
+    }
+
+    .article-content a:hover {
+        border-bottom: 1px solid var(--color-accent);
+    }
+
+    /* СКЕЛЕТОН */
+    .skeleton {
+        animation: skeleton-loading 1.5s ease-in-out infinite;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        border-radius: 4px;
+    }
+
+    @keyframes skeleton-loading {
+        0% {
+            background-position: 200% 0;
         }
-
-        .nav-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            color: var(--color-accent);
-            text-decoration: none;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+        100% {
+            background-position: -200% 0;
         }
+    }
 
-        /* ВРЕМЯ ЧТЕНИЯ */
-        .reading-time {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: var(--color-gray);
-            font-size: 0.95rem;
-            font-weight: 400;
+    .skeleton-title {
+        height: 60px;
+        width: 80%;
+        margin-bottom: 20px;
+    }
+
+    .skeleton-meta {
+        height: 20px;
+        width: 60%;
+        margin-bottom: 30px;
+    }
+
+    .skeleton-text {
+        height: 20px;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .skeleton-text.short {
+        width: 70%;
+    }
+
+    /* ФУТЕР */
+    .footer {
+        background-color: var(--color-gray-light);
+        padding: 80px 0 40px;
+        margin-top: 60px;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 50px;
+    }
+
+    .footer-section h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        color: var(--color-accent);
+        font-weight: 600;
+    }
+
+    .footer-section p {
+        line-height: 1.6;
+        font-size: 0.95rem;
+        color: var(--color-gray);
+        font-weight: 400;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 12px;
+    }
+
+    .footer-links a {
+        color: var(--color-gray);
+        text-decoration: none;
+        transition: color 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+    }
+
+    .footer-links a:hover {
+        color: var(--color-accent);
+    }
+
+    .footer-bottom {
+        max-width: 1200px;
+        margin: 60px auto 0;
+        padding: 30px 40px 0;
+        border-top: 1px solid var(--color-border);
+        text-align: center;
+        color: var(--color-gray);
+        font-size: 0.9rem;
+    }
+
+    /* АДАПТИВНОСТЬ */
+    @media (max-width: 1024px) {
+        .footer-content {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
         }
+    }
 
-        .reading-time::before {
-            content: '⏱️';
-            font-size: 0.8rem;
-        }
-
-        /* Обновляем .article-meta для включения времени чтения */
-        .article-meta {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 0.95rem;
-            color: var(--color-gray);
-            font-weight: 400;
-            flex-wrap: wrap;
-        }
-
-        /* СТИЛИ ДЛЯ СНОСОК - ИСПРАВЛЕННЫЕ И УЛУЧШЕННЫЕ */
-        .footnote-ref {
-            background: none;
-            border: none;
-            color: var(--color-accent);
-            font-size: 0.8em;
-            vertical-align: super;
-            line-height: 0;
-            padding: 0 1px;
-            cursor: pointer;
-            font-family: inherit;
-            text-decoration: none;
-            position: relative;
-            top: -0.5em;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            border-radius: 2px;
-        }
-
-        .footnote-ref:hover {
-            color: var(--color-accent-light);
-            text-decoration: underline;
-            background-color: rgba(139, 0, 0, 0.05);
-        }
-
-        /* ВСПЛЫВАЮЩЕЕ ОКНО ДЛЯ СНОСОК */
-        .footnote-popover {
-            position: absolute;
-            z-index: 2000;
-            width: 320px;
-            max-width: 90vw;
-            background: var(--color-white);
-            border: 1px solid var(--color-border);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: var(--color-gray);
-            opacity: 0;
-            transform: translateY(10px) scale(0.98);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            pointer-events: none;
-        }
-
-        .footnote-popover.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-
-        .footnote-popover::before {
-            content: '';
-            position: absolute;
-            top: -6px;
-            left: 20px;
-            width: 10px;
-            height: 10px;
-            background: var(--color-white);
-            border-left: 1px solid var(--color-border);
-            border-top: 1px solid var(--color-border);
-            transform: rotate(45deg);
-        }
-
-        /* СТИЛИ ДЛЯ ЛЕНИВОЙ ЗАГРУЗКИ ИЗОБРАЖЕНИЙ */
-        .article-content img {
+    @media (max-width: 768px) {
+        .app {
             max-width: 100%;
-            height: auto;
-            margin: 30px 0;
-            border-radius: 4px;
-            display: block;
-            opacity: 0;
-            transition: opacity 0.3s ease;
         }
-
-        .article-content img.loaded {
-            opacity: 1;
+        
+        .article-title {
+            font-size: 2.2rem;
         }
-
-        .article-content img.lazy-loading {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: skeleton-loading 1.5s ease-in-out infinite;
+        
+        .article-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
         }
-
-        /* ОСТАЛЬНЫЕ СТИЛИ (сохраняем из предыдущей версии) */
-        .hamburger { display: none; }
-        .nav-links { display: flex; gap: 40px; list-style: none; }
-        .back-button { display: inline-flex; align-items: center; gap: 8px; margin: 140px 0 30px 0; }
-        .article-container { margin-bottom: 80px; }
-        .article-header { margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px solid var(--color-border); }
-        .article-category { display: inline-block; background: transparent; color: var(--color-accent); padding: 0; font-size: 0.85rem; }
-        .article-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: var(--color-black); margin-bottom: 20px; }
-        .article-content { font-size: 1.1rem; line-height: 1.8; color: var(--color-black); }
-        .footer { background-color: var(--color-gray-light); padding: 80px 0 40px; margin-top: 60px; border-top: 1px solid var(--color-border); }
-        .skeleton { animation: skeleton-loading 1.5s ease-in-out infinite; background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; border-radius: 4px; }
-
-        @keyframes skeleton-loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+        
+        .footnote-popover {
+            max-width: 280px;
+            padding: 15px;
+            font-size: 0.9rem;
         }
-
-        /* АДАПТИВНОСТЬ */
-        @media (max-width: 768px) {
-            .app, .nav-container { padding: 0 20px; }
-            .article-title { font-size: 2.2rem; }
-            .article-meta { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .hamburger { display: block; z-index: 1002; }
-            .nav-links { position: fixed; top: 0; right: -100%; width: 280px; height: 100vh; background: var(--color-white); flex-direction: column; }
-            .footnote-popover { width: 280px; padding: 15px; font-size: 0.9rem; }
+        
+        .footer-content {
+            grid-template-columns: 1fr;
+            gap: 40px;
         }
+    }
 
-        @media (max-width: 480px) {
-            .app { padding: 0 20px; }
-            .article-title { font-size: 1.8rem; }
-            .article-content { font-size: 1rem; }
-            .back-button { margin-top: 120px; }
-            .footnote-popover { width: 250px; padding: 12px; font-size: 0.85rem; left: 50% !important; transform: translateX(-50%) translateY(10px) scale(0.98); }
-            .footnote-popover.active { transform: translateX(-50%) translateY(0) scale(1); }
-            .footnote-popover::before { left: 50%; transform: translateX(-50%) rotate(45deg); }
+    @media (max-width: 480px) {
+        .app {
+            padding: 0 20px;
         }
-    </style>
+        
+        .nav-container {
+            padding: 0 20px;
+        }
+        
+        .article-title {
+            font-size: 1.8rem;
+        }
+        
+        .article-content {
+            font-size: 1rem;
+        }
+        
+        .back-button {
+            margin-top: 120px;
+        }
+        
+        .footnote-popover {
+            max-width: 250px;
+            padding: 12px;
+            font-size: 0.85rem;
+        }
+    }
+</style>
 </head> 
 <body> 
     <!-- ПРОГРЕСС-БАР ЧТЕНИЯ -->
@@ -277,23 +698,22 @@
     
     <!-- Оверлей для меню --> 
     <div class="menu-overlay" id="menuOverlay"></div>
-    
     <nav class="main-nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">Инакой</a>
-            <button class="hamburger" id="hamburger" aria-label="Меню">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="about.html">О проекте</a></li>
-                <li><a href="contacts.html">Контакты</a></li>
-                <li><a href="admin/index.html" class="admin-link">Авторам</a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">Инакой</a>
+        <button class="hamburger" id="hamburger" aria-label="Меню">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">О проекте</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+            <li><a href="admin/index.html" class="admin-link">Авторам</a></li>
+        </ul>
+    </div>
+</nav>
 
 <div class="app">
     <a href="index.html" class="back-button">← Назад к статьям</a>
@@ -349,11 +769,6 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script>
-    // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-    let currentFootnotes = [];
-    let activePopover = null;
-    let activeOverlay = null;
-
     // МЕНЮ
     document.addEventListener('DOMContentLoaded', function() {
         const hamburger = document.getElementById('hamburger');
@@ -406,6 +821,25 @@
         initReadingProgress();
     });
 
+    // ФУНКЦИЯ ДЛЯ РАСЧЕТА ВРЕМЕНИ ЧТЕНИЯ
+    function calculateReadingTime(text) {
+        // Средняя скорость чтения: 200-250 слов в минуту
+        const wordsPerMinute = 230;
+        
+        // Убираем HTML теги и считаем слова
+        const cleanText = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
+        const wordCount = cleanText.split(' ').length;
+        
+        // Время в минутах
+        const minutes = Math.ceil(wordCount / wordsPerMinute);
+        
+        return {
+            minutes: minutes,
+            wordCount: wordCount,
+            text: `${minutes} мин. чтения`
+        };
+    }
+
     // ПРОГРЕСС-БАР ЧТЕНИЯ
     function initReadingProgress() {
         const progressBar = document.getElementById('readingProgress');
@@ -437,79 +871,7 @@
         setInterval(updateProgress, 100);
     }
 
-    // ФУНКЦИЯ ДЛЯ РАСЧЕТА ВРЕМЕНИ ЧТЕНИЯ
-    function calculateReadingTime(text) {
-        // Средняя скорость чтения: 200-250 слов в минуту
-        const wordsPerMinute = 230;
-        
-        // Убираем HTML теги и считаем слова
-        const cleanText = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
-        const wordCount = cleanText.split(' ').length;
-        
-        // Время в минутах
-        const minutes = Math.ceil(wordCount / wordsPerMinute);
-        
-        return {
-            minutes: minutes,
-            wordCount: wordCount,
-            text: `${minutes} мин. чтения`
-        };
-    }
-
-    // ФУНКЦИЯ ДЛЯ ЛЕНИВОЙ ЗАГРУЗКИ ИЗОБРАЖЕНИЙ
-    function initLazyLoading() {
-        const images = document.querySelectorAll('.article-content img');
-        
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    
-                    // Если изображение уже загружено
-                    if (img.complete) {
-                        img.classList.add('loaded');
-                        img.classList.remove('lazy-loading');
-                        observer.unobserve(img);
-                        return;
-                    }
-                    
-                    // Загружаем изображение
-                    img.classList.add('loaded');
-                    img.classList.remove('lazy-loading');
-                    
-                    // Отслеживаем загрузку
-                    img.onload = () => {
-                        img.classList.add('loaded');
-                        img.classList.remove('lazy-loading');
-                        observer.unobserve(img);
-                    };
-                    
-                    img.onerror = () => {
-                        console.error('Ошибка загрузки изображения:', img.src);
-                        observer.unobserve(img);
-                    };
-                    
-                    observer.unobserve(img);
-                }
-            });
-        }, {
-            rootMargin: '100px 0px',
-            threshold: 0.1
-        });
-        
-        images.forEach(img => {
-            // Добавляем класс для скелетона
-            img.classList.add('lazy-loading');
-            
-            // Устанавливаем атрибут loading="lazy"
-            img.setAttribute('loading', 'lazy');
-            
-            // Добавляем в observer
-            imageObserver.observe(img);
-        });
-    }
-
-    // ФУНКЦИЯ ДЛЯ УДАЛЕНИЯ FRONTMATTER
+    // ФУНКЦИЯ ДЛЯ УДАЛЕНИЯ FRONTMATTER (YAML ЗАГОЛОВКА)
     function removeFrontmatter(markdown) {
         const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
         const match = markdown.match(frontmatterRegex);
@@ -521,70 +883,16 @@
         return markdown;
     }
 
-    // ОБРАБОТКА СНОСОК
-    function processFootnotes(markdown) {
-        console.log('Начинаем обработку сносок...');
-        
-        const footnoteRegex = /\[\^(\d+)\]:\s*([\s\S]*?)(?=\n\[\^\d+\]:|\n\n|$)/g;
-        const footnotes = {};
-        
-        let match;
-        const matches = [];
-        
-        while ((match = footnoteRegex.exec(markdown)) !== null) {
-            const number = match[1];
-            let text = match[2].trim();
-            
-            text = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-            footnotes[number] = text;
-            matches.push(match);
-        }
-        
-        console.log(`Найдено сносок: ${Object.keys(footnotes).length}`, footnotes);
-        
-        if (matches.length > 0) {
-            const firstMatch = matches[0];
-            const footnoteBlockStart = firstMatch.index;
-            
-            const remainingText = markdown.substring(footnoteBlockStart);
-            const endOfFootnotes = remainingText.search(/\n\n\s*\n|\n##|\nИсточники|\n*$/);
-            
-            if (endOfFootnotes !== -1) {
-                const footnoteBlock = markdown.substring(footnoteBlockStart, footnoteBlockStart + endOfFootnotes);
-                markdown = markdown.replace(footnoteBlock, '').trim();
-            } else {
-                markdown = markdown.substring(0, footnoteBlockStart).trim();
-            }
-        }
-        
-        const sortedKeys = Object.keys(footnotes).sort((a, b) => parseInt(a) - parseInt(b));
-        currentFootnotes = sortedKeys.map(key => footnotes[key]);
-        
-        const refRegex = /\[\^(\d+)\]/g;
-        markdown = markdown.replace(refRegex, function(match, number) {
-            const index = parseInt(number) - 1;
-            if (index >= 0 && index < currentFootnotes.length) {
-                return `<button class="footnote-ref" data-footnote-index="${index}" aria-label="Сноска ${number}">${number}</button>`;
-            }
-            return match;
-        });
-        
-        return markdown.trim();
-    }
+    // ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ СНОСОК
+    let currentFootnotes = [];
+    let activePopover = null;
+    let activeOverlay = null;
 
     // ФУНКЦИИ ДЛЯ РАБОТЫ СО СНОСКАМИ
     function initFootnotes() {
-        console.log('Инициализируем сноски...');
-        
         const footnoteRefs = document.querySelectorAll('.footnote-ref');
         
         footnoteRefs.forEach(ref => {
-            ref.replaceWith(ref.cloneNode(true));
-        });
-        
-        const newFootnoteRefs = document.querySelectorAll('.footnote-ref');
-        
-        newFootnoteRefs.forEach(ref => {
             ref.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -592,30 +900,22 @@
                 const index = parseInt(this.getAttribute('data-footnote-index'));
                 const footnoteText = currentFootnotes[index];
                 
-                if (!footnoteText) {
-                    console.error(`Сноска с индексом ${index} не найдена`);
-                    return;
-                }
+                if (!footnoteText) return;
                 
+                // Закрываем предыдущую сноску, если она открыта
                 closeActiveFootnote();
                 
+                // Создаем оверлей
                 activeOverlay = document.createElement('div');
                 activeOverlay.className = 'footnote-overlay active';
-                activeOverlay.setAttribute('role', 'button');
-                activeOverlay.setAttribute('aria-label', 'Закрыть сноску');
-                activeOverlay.tabIndex = 0;
                 document.body.appendChild(activeOverlay);
                 
+                // Создаем попап
                 activePopover = document.createElement('div');
                 activePopover.className = 'footnote-popover active';
-                activePopover.setAttribute('role', 'dialog');
-                activePopover.setAttribute('aria-label', `Сноска ${index + 1}`);
-                activePopover.innerHTML = `
-                    <div class="footnote-content">
-                        ${marked.parse(footnoteText)}
-                    </div>
-                `;
+                activePopover.innerHTML = marked.parse(footnoteText); // Парсим markdown в сноске
                 
+                // Позиционируем попап
                 const rect = this.getBoundingClientRect();
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
@@ -623,149 +923,99 @@
                 let top = rect.bottom + scrollTop + 10;
                 let left = rect.left + scrollLeft;
                 
-                if (window.innerWidth < 480) {
-                    left = window.innerWidth / 2;
-                    activePopover.style.left = `${left}px`;
-                    activePopover.style.top = `${top}px`;
-                } else {
-                    if (left + 320 > window.innerWidth) {
-                        left = window.innerWidth - 340;
-                    }
-                    
-                    if (top - scrollTop + activePopover.offsetHeight > window.innerHeight) {
+                // Корректируем позицию для мобильных устройств
+                if (window.innerWidth < 768) {
+                    left = Math.max(10, left - 140);
+                    if (top + activePopover.offsetHeight > window.innerHeight + scrollTop) {
                         top = rect.top + scrollTop - activePopover.offsetHeight - 10;
                     }
-                    
-                    activePopover.style.top = `${top}px`;
-                    activePopover.style.left = `${left}px`;
                 }
+                
+                // Проверяем, не выходит ли попап за границы экрана
+                if (left + activePopover.offsetWidth > window.innerWidth) {
+                    left = window.innerWidth - activePopover.offsetWidth - 10;
+                }
+                
+                activePopover.style.top = top + 'px';
+                activePopover.style.left = left + 'px';
                 
                 document.body.appendChild(activePopover);
                 
-                activeOverlay.focus();
-                
-                const closeHandler = function() {
-                    closeActiveFootnote();
-                };
-                
-                activeOverlay.addEventListener('click', closeHandler);
-                activeOverlay.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
-                        closeHandler();
-                    }
-                });
+                // Обработчики для закрытия
+                activeOverlay.addEventListener('click', closeActiveFootnote);
                 
                 const escHandler = function(e) {
                     if (e.key === 'Escape') {
-                        closeHandler();
+                        closeActiveFootnote();
                     }
                 };
                 
                 document.addEventListener('keydown', escHandler);
                 
+                // Закрываем при скролле
                 const scrollHandler = function() {
-                    closeHandler();
+                    closeActiveFootnote();
                 };
                 
                 window.addEventListener('scroll', scrollHandler, { once: true });
                 
-                activeOverlay._closeHandler = closeHandler;
-                activeOverlay._escHandler = escHandler;
-                activeOverlay._scrollHandler = scrollHandler;
-                
-                activePopover.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
+                // Сохраняем ссылки на обработчики для удаления
+                activeOverlay.escHandler = escHandler;
+                activeOverlay.scrollHandler = scrollHandler;
             });
         });
-        
-        console.log(`Инициализировано ${newFootnoteRefs.length} сносок`);
     }
     
     function closeActiveFootnote() {
         if (activePopover) {
-            if (activeOverlay && activeOverlay._escHandler) {
-                document.removeEventListener('keydown', activeOverlay._escHandler);
-            }
-            if (activeOverlay && activeOverlay._scrollHandler) {
-                window.removeEventListener('scroll', activeOverlay._scrollHandler);
-            }
-            
             activePopover.remove();
             activePopover = null;
         }
         if (activeOverlay) {
-            if (activeOverlay._closeHandler) {
-                activeOverlay.removeEventListener('click', activeOverlay._closeHandler);
+            if (activeOverlay.escHandler) {
+                document.removeEventListener('keydown', activeOverlay.escHandler);
+            }
+            if (activeOverlay.scrollHandler) {
+                window.removeEventListener('scroll', activeOverlay.scrollHandler);
             }
             activeOverlay.remove();
             activeOverlay = null;
         }
     }
-
-    // ЗАГРУЗКА СТАТЬИ
-    async function loadArticle() {
-        console.log('Начинаем загрузку статьи...');
-        
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            const articleId = urlParams.get('id');
-            console.log('ID статьи из URL:', articleId);
-            
-            if (!articleId) {
-                console.log('ID статьи не найден в URL');
-                document.getElementById('articleContainer').innerHTML = 
-                    '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Статья не найдена</div>';
-                return;
-            }
-
-            const response = await fetch('articles-list.json');
-            
-            if (!response.ok) {
-                console.error('Ошибка загрузки articles-list.json:', response.status);
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const articles = await response.json();
-            const article = articles.find(a => a.id == articleId);
-            
-            if (!article) {
-                document.getElementById('articleContainer').innerHTML = 
-                    '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Статья не найдена</div>';
-                return;
-            }
-
-            let content = '';
-            try {
-                const contentResponse = await fetch(article.contentFile);
-                
-                if (contentResponse.ok) {
-                    let markdown = await contentResponse.text();
-                    
-                    // Динамически обновляем мета-теги для SEO
-                    updateMetaTags(article);
-                    
-                    markdown = removeFrontmatter(markdown);
-                    markdown = processFootnotes(markdown);
-                    content = marked.parse(markdown);
-                } else {
-                    console.error('Ошибка загрузки содержимого статьи:', contentResponse.status);
-                    content = createDemoContent(article);
-                }
-            } catch (error) {
-                console.error('Ошибка загрузки содержимого статьи:', error);
-                content = createDemoContent(article);
-            }
-
-            displayArticle(article, content);
-            
-        } catch (error) {
-            console.error('Ошибка загрузки статьи:', error);
-            document.getElementById('articleContainer').innerHTML = 
-                '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Ошибка загрузки статьи. Пожалуйста, попробуйте позже.</div>';
-        }
-    }
     
+    // Обработка сносок в Markdown
+    function processFootnotes(markdown) {
+        // Сначала извлекаем сноски из текста
+        const footnoteRegex = /\[\^(\d+)\]:\s*(.*?)(?=\n\[\^\d+\]:|\n\n|$)/gs;
+        const footnotes = {};
+        
+        // Ищем все сноски
+        let match;
+        while ((match = footnoteRegex.exec(markdown)) !== null) {
+            const number = match[1];
+            const text = match[2].trim();
+            footnotes[number] = text;
+            // Удаляем сноску из основного текста
+            markdown = markdown.replace(match[0], '');
+        }
+        
+        // Сохраняем сноски в глобальную переменную
+        const sortedKeys = Object.keys(footnotes).sort((a, b) => parseInt(a) - parseInt(b));
+        currentFootnotes = sortedKeys.map(key => footnotes[key]);
+        
+        // Заменяем ссылки на сноски в тексте
+        const refRegex = /\[\^(\d+)\]/g;
+        markdown = markdown.replace(refRegex, function(match, number) {
+            const index = sortedKeys.indexOf(number);
+            if (index !== -1) {
+                return `<button class="footnote-ref" data-footnote-index="${index}">${number}</button>`;
+            }
+            return match;
+        });
+        
+        return markdown;
+    }
+
     // ФУНКЦИЯ ОБНОВЛЕНИЯ МЕТА-ТЕГОВ
     function updateMetaTags(article) {
         // Обновляем title
@@ -818,6 +1068,86 @@
         }
         canonical.href = `https://inakoj.netlify.app/article.html?id=${article.id}`;
     }
+
+    // ЗАГРУЗКА СТАТЬИ
+    async function loadArticle() {
+        console.log('Начинаем загрузку статьи...');
+        
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+            console.log('ID статьи из URL:', articleId);
+            
+            if (!articleId) {
+                console.log('ID статьи не найден в URL');
+                document.getElementById('articleContainer').innerHTML = 
+                    '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Статья не найдена</div>';
+                return;
+            }
+
+            // Загружаем список статей
+            console.log('Загружаем articles-list.json...');
+            const response = await fetch('articles-list.json');
+            
+            if (!response.ok) {
+                console.error('Ошибка загрузки articles-list.json:', response.status);
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const articles = await response.json();
+            console.log('Список статей загружен:', articles);
+            
+            const article = articles.find(a => a.id == articleId);
+            console.log('Найдена статья:', article);
+            
+            if (!article) {
+                document.getElementById('articleContainer').innerHTML = 
+                    '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Статья не найдена</div>';
+                return;
+            }
+
+            // Загружаем содержимое статьи
+            let content = '';
+            try {
+                console.log('Загружаем содержимое статьи из:', article.contentFile);
+                const contentResponse = await fetch(article.contentFile);
+                
+                if (contentResponse.ok) {
+                    let markdown = await contentResponse.text();
+                    console.log('Markdown загружен, длина:', markdown.length);
+                    
+                    // Динамически обновляем мета-теги для SEO
+                    updateMetaTags(article);
+                    
+                    // УДАЛЯЕМ FRONTMATTER ПЕРЕД ПРЕОБРАЗОВАНИЕМ
+                    markdown = removeFrontmatter(markdown);
+                    console.log('После удаления frontmatter:', markdown.length);
+                    
+                    // Обрабатываем сноски
+                    markdown = processFootnotes(markdown);
+                    console.log('После обработки сносок:', markdown.length);
+                    
+                    // Преобразуем Markdown в HTML
+                    content = marked.parse(markdown);
+                    console.log('Markdown преобразован в HTML');
+                } else {
+                    console.error('Ошибка загрузки содержимого статьи:', contentResponse.status);
+                    // Если файл не найден, создаем демо-контент
+                    content = createDemoContent(article);
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки содержимого статьи:', error);
+                content = createDemoContent(article);
+            }
+
+            displayArticle(article, content);
+            
+        } catch (error) {
+            console.error('Ошибка загрузки статьи:', error);
+            document.getElementById('articleContainer').innerHTML = 
+                '<div style="text-align: center; padding: 80px 20px; color: var(--color-gray); font-size: 1.1rem;">Ошибка загрузки статьи. Пожалуйста, попробуйте позже.</div>';
+        }
+    }
     
     function createDemoContent(article) {
         return `
@@ -840,8 +1170,6 @@
     function displayArticle(article, content) {
         const container = document.getElementById('articleContainer');
         
-        // Обновляем title (уже сделано в updateMetaTags)
-        
         // Рассчитываем время чтения
         const readingTime = calculateReadingTime(content);
         
@@ -860,13 +1188,12 @@
             </div>
         `;
         
-        console.log('Статья отображена, инициализируем сноски и ленивую загрузку...');
+        console.log('Статья отображена, инициализируем сноски...');
         
-        // Инициализируем сноски
+        // Инициализируем сноски после загрузки статьи
         setTimeout(() => {
             initFootnotes();
-            initLazyLoading(); // Инициализируем ленивую загрузку изображений
-            console.log('Сноски и ленивая загрузка инициализированы');
+            console.log('Сноски инициализированы');
         }, 100);
     }
 </script>
@@ -884,5 +1211,4 @@
         });
     }
 </script>
-</body>
-</html>
+</body> </html>
